@@ -421,12 +421,12 @@ with open("test_normality.txt", "w") as f:
 
 diag_summary = f"""Pruebas de Diagnóstico del Modelo VAR(2):
 1. Prueba de Autocorrelación Residual (Portmanteau / Whiteness test, nlags=4):
-   - Estadístico: {whiteness.stat:.4f}
+   - Estadístico: {whiteness.test_statistic:.4f}
    - p-valor: {whiteness.pvalue:.4f}
    - Conclusión: {'No hay autocorrelación serial a un nivel de significancia del 5%.' if whiteness.pvalue > 0.05 else 'Se rechaza la hipótesis nula de no autocorrelación.'}
 
 2. Prueba de Normalidad de Residuos (Jarque-Bera):
-   - Estadístico: {normality.stat:.4f}
+   - Estadístico: {normality.test_statistic:.4f}
    - p-valor: {normality.pvalue:.4f}
    - Conclusión: {'Los residuos siguen una distribución normal a un nivel de significancia del 5%.' if normality.pvalue > 0.05 else 'Se rechaza la hipótesis nula de normalidad.'}
 """

@@ -12,14 +12,6 @@ from docx.oxml.ns import qn
 def set_cell_border(cell, **kwargs):
     """
     Set cell's border
-    Usage:
-    set_cell_border(
-        cell,
-        top={"sz": 12, "val": "single", "color": "D3D3D3", "space": "0"},
-        bottom={"sz": 12, "color": "00FF00", "val": "single"},
-        start={"sz": 24, "val": "dashed", "shadow": "true"},
-        end={"sz": 12, "val": "dashed"},
-    )
     """
     tc = cell._tc
     tcPr = tc.get_or_add_tcPr()
@@ -38,6 +30,116 @@ def set_cell_border(cell, **kwargs):
                 tcBorders.append(element)
             for key, val in edge_data.items():
                 element.set(qn('w:{}'.format(key)), str(val))
+
+def format_cite_key(key):
+    key = key.strip()
+    # Mapping of LaTeX keys to clean, formatted academic citations
+    mapping = {
+        "agresti2004": "Agresti y Mojon, 2004",
+        "barro1976": "Barro, 1976",
+        "bernanke1986": "Bernanke, 1986",
+        "bernanke1992": "Bernanke y Blinder, 1992",
+        "bernanke2005": "Bernanke et al., 2005",
+        "blanchard2002": "Blanchard y Perotti, 2002",
+        "blanchard1989": "Blanchard y Quah, 1989",
+        "blanchard1992": "Blanchard y Quah, 1992",
+        "boivin2010": "Boivin et al., 2010",
+        "calvo1983": "Calvo, 1983",
+        "caporale2018": "Caporale et al., 2018",
+        "caporale2020": "Caporale y Girardi, 2020",
+        "castillo2018": "Castillo et al., 2018",
+        "cespedes2020": "Céspedes y Salas, 2020",
+        "chiquiar2016": "Chiquiar y Noriega, 2016",
+        "christiano1999": "Christiano et al., 1999",
+        "christiano2005": "Christiano et al., 2005",
+        "christiano2006": "Christiano y Vigfusson, 2006",
+        "clarida1999": "Clarida et al., 1999",
+        "defrancisco2017": "de Francisco y Torres, 2017",
+        "enders2014": "Enders, 2014",
+        "favero2001": "Favero, 2001",
+        "favero2010": "Favero, 2010",
+        "favero2005": "Favero y Giavazzi, 2005",
+        "fernandez2024": "Fernández y Rodríguez, 2024",
+        "friedman1968": "Friedman, 1968",
+        "gali1999": "Galí, 1999",
+        "gali2008": "Galí, 2008",
+        "gali2023": "Galí, 2023",
+        "gertler2018": "Gertler y Karadi, 2018",
+        "hamilton1994": "Hamilton, 1994",
+        "humala2023": "Humala y Tuesta, 2023",
+        "jordà2022": "Jordà et al., 2022",
+        "kilian2011": "Kilian, 2011",
+        "kilian2017": "Kilian y Lütkepohl, 2017",
+        "kilian2019": "Kilian y Lütkepohl, 2019",
+        "kim2005": "Kim y Lee, 2005",
+        "kim2000": "Kim y Roubini, 2000",
+        "kutner2021": "Kutner y Posen, 2021",
+        "kydland1977": "Kydland y Prescott, 1977",
+        "kydland1982": "Kydland y Prescott, 1982",
+        "lahura2021": "Lahura, 2021",
+        "lutkepohl2005": "Lütkepohl, 2005",
+        "littlepohl2015": "Lütkepohl y Krätzig, 2015",
+        "llontop2019": "Llontop, 2019",
+        "lucas1972": "Lucas, 1972",
+        "lucas1976": "Lucas, 1976",
+        "mendoza2022": "Mendoza y Huamán, 2022",
+        "mishkin1996": "Mishkin, 1996",
+        "perotti2004": "Perotti, 2004",
+        "phelps1967": "Phelps, 1967",
+        "primiceri2005": "Primiceri, 2005",
+        "restrepo2015": "Restrepo y Rincón, 2015",
+        "rojas2020": "Rojas, 2020",
+        "rubio2020": "Rubio-Ramírez y Waggoner, 2020",
+        "shapiro1987": "Shapiro y Watson, 1987",
+        "sims1980": "Sims, 1980",
+        "sims1982": "Sims, 1982",
+        "sims1986": "Sims, 1986",
+        "sims1992": "Sims, 1992",
+        "stock1999": "Stock y Watson, 1999",
+        "stock2001": "Stock y Watson, 2001",
+        "stock2018": "Stock y Watson, 2018",
+        "swenson2005": "Svensson, 2005",
+        "tsay2014": "Tsay, 2014",
+        "uhlig2005": "Uhlig, 2005",
+        "walsh2010": "Walsh, 2010",
+        "winkelried2016": "Winkelried y Huanca, 2016",
+        "woodford2003": "Woodford, 2003",
+        "woodford2019": "Woodford, 2019",
+        "yun1996": "Yun, 1996"
+    }
+    if key in mapping:
+        return mapping[key]
+    
+    # Fallback to capitalize and split name/year
+    match = re.match(r'([a-zA-Z\u00C0-\u017F]+)(\d+)', key)
+    if match:
+        author = match.group(1).capitalize()
+        year = match.group(2)
+        return f"{author}, {year}"
+    return key
+
+def replace_citet(match):
+    keys = match.group(1).split(',')
+    formatted_cites = []
+    for k in keys:
+        k = k.strip()
+        full = format_cite_key(k)
+        if ", " in full:
+            author, year = full.rsplit(", ", 1)
+            formatted_cites.append(f"{author} ({year})")
+        else:
+            formatted_cites.append(full)
+    if len(formatted_cites) == 1:
+        return formatted_cites[0]
+    elif len(formatted_cites) == 2:
+        return f"{formatted_cites[0]} y {formatted_cites[1]}"
+    else:
+        return ", ".join(formatted_cites[:-1]) + " y " + formatted_cites[-1]
+
+def replace_citep(match):
+    keys = match.group(1).split(',')
+    formatted_cites = [format_cite_key(k.strip()) for k in keys]
+    return f"({'; '.join(formatted_cites)})"
 
 def clean_math(text):
     # Remove \label{...}
@@ -103,14 +205,29 @@ def clean_latex(text):
     if not text:
         return ""
     
-    # Process inline math blocks first
+    # 1. Process citations (replace \citep and \citet with clean text)
+    text = re.sub(r'\\citep(?:\[[^\]]*\])?(?:\[[^\]]*\])?\{([^}]+)\}', replace_citep, text)
+    text = re.sub(r'\\citet(?:\[[^\]]*\])?(?:\[[^\]]*\])?\{([^}]+)\}', replace_citet, text)
+
+    # 2. Process inline math blocks
     def math_replacer(match):
         math_content = match.group(1)
         return clean_math(math_content)
         
     text = re.sub(r'\$([^$]+)\$', math_replacer, text)
 
-    # Replace common LaTeX characters and markup
+    # 3. Replace common LaTeX formatting and spacing commands
+    text = text.replace(r'\noindent', '')
+    text = text.replace(r'\centering', '')
+    text = text.replace(r'\onehalfspacing', '')
+    text = text.replace(r'\doublespacing', '')
+    text = text.replace(r'\singlespacing', '')
+    text = text.replace(r'\clearpage', '')
+    text = text.replace(r'\newpage', '')
+    text = text.replace(r'\hfill', '')
+    text = text.replace(r'\\', '')  # Remove double backslash breaks
+    
+    # 4. Standard character replacements
     text = text.replace(r'\%', '%')
     text = text.replace(r'\$', '$')
     text = text.replace(r'\&', '&')
@@ -127,13 +244,12 @@ def clean_latex(text):
     text = text.replace(r'\rightarrow', '→')
     text = text.replace(r'\leftarrow', '←')
     
-    # Remove simple commands like \textit{...}, \textbf{...}, \texttt{...}, \url{...}
+    # 5. Remove simple commands like \textit{...}, \textbf{...}, \texttt{...}, \url{...}
     text = re.sub(r'\\textit\{([^}]+)\}', r'\1', text)
     text = re.sub(r'\\textbf\{([^}]+)\}', r'\1', text)
     text = re.sub(r'\\texttt\{([^}]+)\}', r'\1', text)
     text = re.sub(r'\\url\{([^}]+)\}', r'\1', text)
     text = re.sub(r'\\href\{([^}]+)\}\{([^}]+)\}', r'\2 (\1)', text)
-    text = re.sub(r'\\cite\{([^}]+)\}', r'[\1]', text)
     text = re.sub(r'\\ref\{([^}]+)\}', r'\1', text)
     text = re.sub(r'\\label\{([^}]+)\}', '', text)
     
@@ -142,7 +258,6 @@ def clean_latex(text):
     text = text.replace('`', "'")
     
     # Replace LaTeX special accent notation if any
-    # e.g. \'a -> á, \~n -> ñ
     accents = {
         r"\'a": "á", r"\'e": "é", r"\'i": "í", r"\'o": "ó", r"\'u": "ú",
         r"\'A": "Á", r"\'E": "É", r"\'I": "Í", r"\'O": "Ó", r"\'U": "Ú",
@@ -267,10 +382,54 @@ def build_word():
     in_verbatim = False
     verbatim_lines = []
     current_section = ""
+    started = False  # Set to True when we hit abstract, skipping preamble/metadata
 
     while i < len(lines):
         line = lines[i]
         
+        # Skip everything before abstract (preamble, metadata)
+        if not started:
+            if r'\begin{abstract}' in line:
+                started = True
+                # Add "Resumen" heading in Word
+                h = doc.add_paragraph()
+                h.paragraph_format.space_before = Pt(18)
+                h.paragraph_format.space_after = Pt(6)
+                h.paragraph_format.keep_with_next = True
+                run = h.add_run("Resumen")
+                run.bold = True
+                run.font.size = Pt(13)
+                i += 1
+                continue
+            else:
+                i += 1
+                continue
+
+        # Check verbatim blocks (Python script in appendix)
+        if r'\begin{verbatim}' in line:
+            in_verbatim = True
+            verbatim_lines = []
+            i += 1
+            continue
+        elif r'\end{verbatim}' in line:
+            in_verbatim = False
+            # Add monospaced code block
+            p = doc.add_paragraph()
+            p.paragraph_format.line_spacing = 1.0
+            p.paragraph_format.space_after = Pt(2)
+            p.paragraph_format.left_indent = Cm(0.5)
+            code_text = "\n".join(verbatim_lines)
+            run = p.add_run(code_text)
+            run.font.name = 'Courier New'
+            run.font.size = Pt(8.5)
+            i += 1
+            continue
+            
+        if in_verbatim:
+            verbatim_lines.append(line)
+            i += 1
+            continue
+
         # Check equation blocks
         if r'\begin{equation}' in line:
             eq_lines = []
@@ -293,34 +452,8 @@ def build_word():
             i += 1
             continue
 
-        # Check verbatim blocks
-        if r'\begin{verbatim}' in line:
-            in_verbatim = True
-            verbatim_lines = []
-            i += 1
-            continue
-        elif r'\end{verbatim}' in line:
-            in_verbatim = False
-            # Add monospaced code block
-            p = doc.add_paragraph()
-            p.paragraph_format.line_spacing = 1.0
-            p.paragraph_format.space_after = Pt(2)
-            p.paragraph_format.left_indent = Cm(0.5)
-            code_text = "\n".join(verbatim_lines)
-            run = p.add_run(code_text)
-            run.font.name = 'Courier New'
-            run.font.size = Pt(8.5)
-            # Add a light border/shading style if possible
-            i += 1
-            continue
-            
-        if in_verbatim:
-            verbatim_lines.append(line)
-            i += 1
-            continue
-
-        # Skip document class, packages, settings
-        if any(line.startswith(x) for x in [r'\documentclass', r'\usepackage', r'\geometry', r'\hypersetup', r'\Declare', r'\begin{document}', r'\maketitle', r'\end{document}']):
+        # Skip abstract delimiters, layout, and document structure lines
+        if any(x in line for x in [r'\end{abstract}', r'\maketitle', r'\begin{center}', r'\end{center}', r'\vspace']):
             i += 1
             continue
 
@@ -378,9 +511,8 @@ def build_word():
                 p.paragraph_format.space_after = Pt(6)
                 p.paragraph_format.line_spacing = 1.5
                 
-            # If we are in "Resultados" subsections, let's insert the graphics!
+            # Insert graphics inline in respective subsections
             if "estabilidad del VAR" in title.lower():
-                # Let's insert the stability plot
                 img_path = os.path.join(art2_dir, "graficos", "graficos_estabilidad.png")
                 if os.path.exists(img_path):
                     p_img = doc.add_paragraph()
@@ -393,7 +525,6 @@ def build_word():
                     run_cap.italic = True
                     
             elif "Impulso-Respuesta" in title:
-                # Let's insert the IRF plots
                 img_path1 = os.path.join(art2_dir, "graficos", "graficos_irf_all.png")
                 img_path2 = os.path.join(art2_dir, "graficos", "graficos_irf_monetario.png")
                 if os.path.exists(img_path1):
@@ -417,7 +548,6 @@ def build_word():
                     run_cap2.italic = True
                     
             elif "Varianza del Error" in title:
-                # Let's insert the FEVD plot
                 img_path = os.path.join(art2_dir, "graficos", "graficos_fevd.png")
                 if os.path.exists(img_path):
                     p_img = doc.add_paragraph()
@@ -430,7 +560,6 @@ def build_word():
                     run_cap.italic = True
                     
             elif "Histórica" in title:
-                # Let's insert the historical decomposition plot
                 img_path = os.path.join(art2_dir, "graficos", "graficos_descomposicion_historica.png")
                 if os.path.exists(img_path):
                     p_img = doc.add_paragraph()
@@ -445,7 +574,7 @@ def build_word():
             i += 1
             continue
 
-        # Check tables
+        # Check table blocks
         if r'\begin{table}' in line:
             table_lines = []
             while i < len(lines) and r'\end{table}' not in lines[i]:
@@ -454,11 +583,9 @@ def build_word():
             table_lines.append(lines[i])
             table_block = "\n".join(table_lines)
             
-            # Find caption
             caption_match = re.search(r'\\caption\{([^\}]+)\}', table_block)
             caption = clean_latex(caption_match.group(1)) if caption_match else "Tabla"
             
-            # Add caption
             p_cap = doc.add_paragraph()
             p_cap.alignment = WD_ALIGN_PARAGRAPH.LEFT
             p_cap.paragraph_format.space_before = Pt(6)
@@ -468,19 +595,16 @@ def build_word():
             run_cap.bold = True
             run_cap.font.size = Pt(10)
             
-            # Parse rows
             rows_data = parse_latex_table(table_block)
             if rows_data:
                 table = doc.add_table(rows=len(rows_data), cols=len(rows_data[0]))
                 table.style = 'Normal Table'
                 
-                # Style and fill the table
                 for r_idx, row in enumerate(rows_data):
                     for c_idx, val in enumerate(row):
                         cell = table.rows[r_idx].cells[c_idx]
                         cell.text = val
                         
-                        # Style text in cells
                         for p in cell.paragraphs:
                             p.paragraph_format.space_after = Pt(2)
                             p.paragraph_format.line_spacing = 1.0
@@ -492,7 +616,6 @@ def build_word():
                                     
                         # Set cell padding and APA styled borders
                         if r_idx == 0:
-                            # Header borders: top and bottom lines, light gray shading
                             set_cell_border(
                                 cell,
                                 top={"sz": 12, "val": "single", "color": "000000", "space": "0"},
@@ -502,7 +625,6 @@ def build_word():
                             )
                             set_cell_background(cell, "F2F2F2")
                         elif r_idx == len(rows_data) - 1:
-                            # Last row border: bottom line
                             set_cell_border(
                                 cell,
                                 top={"sz": 0, "val": "none"},
@@ -511,7 +633,6 @@ def build_word():
                                 right={"sz": 0, "val": "none"}
                             )
                         else:
-                            # Intermediate rows: no borders
                             set_cell_border(
                                 cell,
                                 top={"sz": 0, "val": "none"},
@@ -519,7 +640,6 @@ def build_word():
                                 left={"sz": 0, "val": "none"},
                                 right={"sz": 0, "val": "none"}
                             )
-                # Add space after table
                 p_space = doc.add_paragraph()
                 p_space.paragraph_format.space_before = Pt(6)
                 p_space.paragraph_format.space_after = Pt(6)
@@ -527,7 +647,7 @@ def build_word():
             i += 1
             continue
 
-        # Skip figure blocks (since we insert images manually in headings/subsections)
+        # Skip figure blocks (since we insert manually)
         if r'\begin{figure}' in line:
             while i < len(lines) and r'\end{figure}' not in lines[i]:
                 i += 1
@@ -541,13 +661,14 @@ def build_word():
             
         # Parse bibliography items
         if line.strip().startswith(r'\bibitem'):
-            # It's a reference list item
             ref_text = line.strip()
-            # Extract content from \bibitem{label} text
-            ref_match = re.search(r'\\bibitem\{[^}]+\}\s*(.*)', ref_text)
+            ref_match = re.search(r'\\bibitem\[([^\]]+)\]\{([^}]+)\}\s*(.*)', ref_text)
+            if not ref_match:
+                ref_match = re.search(r'\\bibitem\{([^}]+)\}\s*(.*)', ref_text)
+            
             if ref_match:
-                content_ref = clean_latex(ref_match.group(1))
-                # If reference is split across multiple lines, read them
+                # Extract the actual citation content (the last group)
+                content_ref = clean_latex(ref_match.groups()[-1])
                 while i + 1 < len(lines) and not lines[i+1].strip().startswith(r'\bibitem') and not lines[i+1].strip().startswith(r'\end{') and not lines[i+1].strip().startswith(r'\section'):
                     i += 1
                     content_ref += " " + clean_latex(lines[i].strip())
@@ -555,31 +676,45 @@ def build_word():
                 p = doc.add_paragraph()
                 p.paragraph_format.left_indent = Cm(1.27)
                 p.paragraph_format.first_line_indent = Cm(-1.27)
+                p.paragraph_format.space_after = Pt(6)
+                p.paragraph_format.line_spacing = 1.5
                 run = p.add_run(content_ref)
                 run.font.size = Pt(11)
                 run.font.name = 'Times New Roman'
             i += 1
             continue
 
-
+        # Process keywords block (Palabras clave)
+        if 'Palabras clave:' in line or 'Palabras clave' in clean_latex(line):
+            cleaned_line = clean_latex(line)
+            cleaned_line = cleaned_line.replace(r'Palabras clave:', '').replace('Palabras clave', '')
+            
+            p = doc.add_paragraph()
+            p.paragraph_format.space_before = Pt(6)
+            p.paragraph_format.space_after = Pt(12)
+            run_lbl = p.add_run("Palabras clave: ")
+            run_lbl.bold = True
+            run_lbl.font.size = Pt(11)
+            
+            run_val = p.add_run(cleaned_line.strip())
+            run_val.font.size = Pt(11)
+            
+            i += 1
+            continue
 
         # Add normal text paragraphs
         text = clean_latex(line.strip())
         if text:
-            # Check if this is a subsection title or if it is part of body text
-            # Some text might contain comments, let's ignore comments starting with %
-            if not text.startswith('%'):
+            # Skip LaTeX comment lines and other leftover LaTeX command strings
+            if not text.startswith('%') and not text.startswith('\\'):
                 p = doc.add_paragraph()
                 p.add_run(text)
                 
         i += 1
 
-    # Add extra files in Annexes: Anexo B
-    # Let's insert the diagnostic results in the Word document under Anexo B!
+    # Insert detailed diagnostics output (Anexo B)
     for p in doc.paragraphs:
         if "Anexo B" in p.text:
-            # We insert diagnostics content right after this paragraph
-            # Read var_summary.txt and svar_summary.txt
             var_sum_path = os.path.join(art2_dir, "resultados", "var_summary.txt")
             svar_sum_path = os.path.join(art2_dir, "resultados", "svar_summary.txt")
             diag_path = os.path.join(art2_dir, "resultados", "diagnosticos_resumen.txt")
@@ -605,7 +740,7 @@ def build_word():
 
     # Save document
     doc.save(docx_path)
-    print("Successfully built the expanded DOCX report!")
+    print("Successfully built the fully cleaned expanded DOCX report!")
 
 if __name__ == "__main__":
     build_word()

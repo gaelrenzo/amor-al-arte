@@ -39,9 +39,77 @@ def set_cell_border(cell, **kwargs):
             for key, val in edge_data.items():
                 element.set(qn('w:{}'.format(key)), str(val))
 
+def clean_math(text):
+    # Remove \label{...}
+    text = re.sub(r'\\label\{[^}]+\}', '', text)
+    
+    # Remove font commands but keep their content
+    text = re.sub(r'\\mathbf\{([^}]+)\}', r'\1', text)
+    text = re.sub(r'\\boldsymbol\{([^}]+)\}', r'\1', text)
+    text = re.sub(r'\\mathrm\{([^}]+)\}', r'\1', text)
+    text = re.sub(r'\\mathit\{([^}]+)\}', r'\1', text)
+    text = re.sub(r'\\texttt\{([^}]+)\}', r'\1', text)
+    
+    # Replace greek letters and math symbols
+    greek = {
+        r'\alpha': 'α', r'\beta': 'β', r'\gamma': 'γ', r'\delta': 'δ',
+        r'\epsilon': 'ε', r'\varepsilon': 'ε', r'\theta': 'θ', r'\vartheta': 'θ',
+        r'\lambda': 'λ', r'\mu': 'μ', r'\pi': 'π', r'\rho': 'ρ', r'\sigma': 'σ',
+        r'\tau': 'τ', r'\phi': 'φ', r'\chi': 'χ', r'\omega': 'ω',
+        r'\Sigma': 'Σ', r'\Phi': 'Φ', r'\Theta': 'Θ', r'\Omega': 'Ω',
+        r'\boldsymbol{\varepsilon}': 'ε', r'\boldsymbol{\Phi}': 'Φ',
+        r'\boldsymbol{\Theta}': 'Θ', r'\boldsymbol{\mu}': 'μ',
+        r'\boldsymbol{\Sigma}': 'Σ', r'\mathbf{B}': 'B',
+        r'\mathbf{I}': 'I', r'\mathbf{y}': 'y', r'\mathbf{c}': 'c',
+        r'\mathbf{A}': 'A', r'\mathbf{u}': 'u'
+    }
+    
+    for k, v in greek.items():
+        text = text.replace(k, v)
+        
+    # Replace math operations and formatting
+    text = text.replace(r'\times', ' × ')
+    text = text.replace(r'\cdots', ' ... ')
+    text = text.replace(r'\dots', ' ... ')
+    text = text.replace(r'\sum', '∑')
+    text = text.replace(r'\infty', '∞')
+    text = text.replace(r'\ge', '≥')
+    text = text.replace(r'\le', '≤')
+    text = text.replace(r'\neq', '≠')
+    text = text.replace(r'\approx', '≈')
+    text = text.replace(r'\rightarrow', '→')
+    text = text.replace(r'\leftarrow', '←')
+    
+    # Clean up subscripts
+    text = re.sub(r'_\{([^}]+)\}', r'_\1', text)
+    text = re.sub(r'\^\{([^}]+)\}', r'^\1', text)
+    
+    # Strip double backslashes
+    text = text.replace(r'\\', '')
+    
+    # Replace some raw latex commands
+    text = text.replace(r'\sum_{i=0}^{\infty}', '∑ (desde i=0 hasta ∞)')
+    
+    return text.strip()
+
+def set_cell_background(cell, fill_color):
+    from docx.oxml import parse_xml
+    from docx.oxml.ns import nsdecls
+    tcPr = cell._tc.get_or_add_tcPr()
+    shd = parse_xml(f'<w:shd {nsdecls("w")} w:fill="{fill_color}"/>')
+    tcPr.append(shd)
+
 def clean_latex(text):
     if not text:
         return ""
+    
+    # Process inline math blocks first
+    def math_replacer(match):
+        math_content = match.group(1)
+        return clean_math(math_content)
+        
+    text = re.sub(r'\$([^$]+)\$', math_replacer, text)
+
     # Replace common LaTeX characters and markup
     text = text.replace(r'\%', '%')
     text = text.replace(r'\$', '$')
@@ -203,6 +271,28 @@ def build_word():
     while i < len(lines):
         line = lines[i]
         
+        # Check equation blocks
+        if r'\begin{equation}' in line:
+            eq_lines = []
+            i += 1
+            while i < len(lines) and r'\end{equation}' not in lines[i]:
+                eq_lines.append(lines[i])
+                i += 1
+            eq_text = " ".join(eq_lines)
+            eq_cleaned = clean_math(eq_text)
+            
+            p_eq = doc.add_paragraph()
+            p_eq.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            p_eq.paragraph_format.space_before = Pt(6)
+            p_eq.paragraph_format.space_after = Pt(6)
+            p_eq.paragraph_format.keep_with_next = True
+            run_eq = p_eq.add_run(eq_cleaned)
+            run_eq.font.name = 'Times New Roman'
+            run_eq.font.size = Pt(11)
+            run_eq.italic = True
+            i += 1
+            continue
+
         # Check verbatim blocks
         if r'\begin{verbatim}' in line:
             in_verbatim = True
@@ -382,7 +472,7 @@ def build_word():
             rows_data = parse_latex_table(table_block)
             if rows_data:
                 table = doc.add_table(rows=len(rows_data), cols=len(rows_data[0]))
-                table.style = 'Table Grid'
+                table.style = 'Normal Table'
                 
                 # Style and fill the table
                 for r_idx, row in enumerate(rows_data):
@@ -400,14 +490,35 @@ def build_word():
                                 if r_idx == 0:
                                     r.bold = True
                                     
-                        # Set cell padding and subtle borders
-                        set_cell_border(
-                            cell,
-                            top={"sz": 4, "val": "single", "color": "CCCCCC", "space": "0"},
-                            bottom={"sz": 4, "val": "single", "color": "CCCCCC", "space": "0"},
-                            left={"sz": 0, "val": "none"},
-                            right={"sz": 0, "val": "none"}
-                        )
+                        # Set cell padding and APA styled borders
+                        if r_idx == 0:
+                            # Header borders: top and bottom lines, light gray shading
+                            set_cell_border(
+                                cell,
+                                top={"sz": 12, "val": "single", "color": "000000", "space": "0"},
+                                bottom={"sz": 8, "val": "single", "color": "000000", "space": "0"},
+                                left={"sz": 0, "val": "none"},
+                                right={"sz": 0, "val": "none"}
+                            )
+                            set_cell_background(cell, "F2F2F2")
+                        elif r_idx == len(rows_data) - 1:
+                            # Last row border: bottom line
+                            set_cell_border(
+                                cell,
+                                top={"sz": 0, "val": "none"},
+                                bottom={"sz": 12, "val": "single", "color": "000000", "space": "0"},
+                                left={"sz": 0, "val": "none"},
+                                right={"sz": 0, "val": "none"}
+                            )
+                        else:
+                            # Intermediate rows: no borders
+                            set_cell_border(
+                                cell,
+                                top={"sz": 0, "val": "none"},
+                                bottom={"sz": 0, "val": "none"},
+                                left={"sz": 0, "val": "none"},
+                                right={"sz": 0, "val": "none"}
+                            )
                 # Add space after table
                 p_space = doc.add_paragraph()
                 p_space.paragraph_format.space_before = Pt(6)

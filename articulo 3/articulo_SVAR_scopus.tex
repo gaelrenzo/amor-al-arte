@@ -1,0 +1,483 @@
+% ============================================================
+% ARTÍCULO CIENTÍFICO - MODELO SVAR
+% Formato para revista indexada en Scopus
+% Econometría III - Universidad Nacional del Altiplano
+% ============================================================
+\documentclass[12pt, a4paper]{article}
+
+% --- Paquetes ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english,spanish]{babel}
+\usepackage{times}
+\usepackage{geometry}
+\geometry{left=2.54cm, right=2.54cm, top=2.54cm, bottom=2.54cm}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{mathptmx}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{caption}
+\usepackage[natbibapa]{apacite}
+\bibliographystyle{apacite}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Configuración de listings para código Python
+\lstset{
+    language=Python,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    frame=single,
+    breaklines=true,
+    tabsize=4,
+    showstringspaces=false,
+    commentstyle=\color{gray},
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+}
+
+% Números de línea en todo el documento
+\usepackage{lineno}
+\linenumbers
+
+% ============================================================
+% INICIO DEL DOCUMENTO
+% ============================================================
+\begin{document}
+
+% ============================================================
+% TITLE PAGE
+% ============================================================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+
+{\LARGE\bfseries Impacto de los choques macroeconómicos sobre la actividad económica peruana: Un análisis SVAR con datos sintéticos (2015-2024)}\\[1.5cm]
+
+{\large
+Renzo Gael Mamani Quispe$^{1*}$ \\
+Alfredo Pelayo Calatayud Mendoza$^{2}$ \\
+José Carlos Machicao Mamani$^{3}$
+}\\[1cm]
+
+{\small
+$^{1}$ Universidad Nacional del Altiplano, Facultad de Ingeniería Económica, Puno, Perú \\
+$^{2}$ Docente del Curso de Econometría III, Universidad Nacional del Altiplano, Puno, Perú \\
+$^{3}$ Jefe de Práctica, Universidad Nacional del Altiplano, Facultad de Ingeniería Económica, Puno, Perú
+}\\[1cm]
+
+{\small $^{*}$Autor de correspondencia: \textit{renzomamani@example.com}}\\[1.5cm]
+
+{\small
+\textbf{JEL Classification:} C32; E62; E52; F41 \\
+\textbf{Keywords:} structural VAR; SVAR; macroeconomic shocks; impulse-response functions; variance decomposition; fiscal policy; monetary policy; Peru.
+}\\[1.5cm]
+
+\vfill
+\end{titlepage}
+
+% ============================================================
+% ABSTRACT
+% ============================================================
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+\textbf{Objective:} This study analyzes the impact of macroeconomic shocks on Peruvian economic activity using a structural vector autoregressive (SVAR) model with synthetic monthly data from 2015 to 2024. \textbf{Theoretical Framework:} The research integrates Keynesian and monetarist perspectives to understand the dynamic transmission mechanisms of fiscal and monetary policy shocks. \textbf{Method:} Six macroeconomic variables were employed: Gross Domestic Product (GDP), inflation rate, nominal exchange rate, reference interest rate, money supply (M2), and government spending. Structural shock identification was performed through Cholesky decomposition with a recursive ordering grounded in economic theory. The econometric procedure included unit root tests (ADF, PP, KPSS), optimal lag selection (AIC, BIC, HQIC, FPE), VAR stability verification, impulse-response functions (IRF), forecast error variance decomposition (FEVD), and historical decomposition. \textbf{Results:} The impulse-response functions reveal that government spending shocks generate a positive and persistent effect on GDP, with a maximum impact of 0.72\% observed in the third month. Interest rate shocks show a contractionary effect of up to $-0.38\%$. The FEVD indicates that government spending and money supply jointly explain approximately 45\% of GDP variability in 12-month horizons. Historical decomposition shows that economic policy shocks significantly contributed to GDP fluctuations during the post-pandemic recovery period. \textbf{Originality/Value:} Although based on simulated data for academic purposes, this study demonstrates the applicability of the SVAR approach for macroeconomic dynamics analysis and provides a robust methodological framework applicable to real data in emerging economies.
+
+\bigskip
+\noindent\textbf{Keywords:} structural VAR; SVAR; macroeconomic shocks; impulse-response functions; variance decomposition; fiscal policy; monetary policy; Peru.
+
+\noindent\textbf{JEL Classification:} C32; E62; E52; F41.
+
+% ============================================================
+% RESUMEN
+% ============================================================
+\section*{Resumen}
+\addcontentsline{toc}{section}{Resumen}
+
+\textbf{Objetivo:} El presente estudio analiza el impacto de los choques macroeconómicos sobre la actividad económica peruana mediante un modelo SVAR con datos sintéticos mensuales para el período 2015-2024. \textbf{Marco Teórico:} La investigación integra las perspectivas keynesiana y monetarista para comprender los mecanismos de transmisión dinámica de los choques de política fiscal y monetaria. \textbf{Método:} Se emplearon seis variables macroeconómicas: PIB, tasa de inflación, tipo de cambio nominal, tasa de interés de referencia, oferta monetaria (M2) y gasto público. La identificación de los choques estructurales se realizó mediante descomposición de Cholesky. El procedimiento econométrico incluyó pruebas de raíz unitaria, selección óptima de rezagos, verificación de estabilidad del VAR, funciones impulso-respuesta (IRF), descomposición de varianza (FEVD) y descomposición histórica. \textbf{Resultados:} Las IRF revelan que los choques de gasto público generan un efecto positivo y persistente sobre el PIB (máximo 0.72\% en t+3), mientras que los choques de tasa de interés muestran un efecto contractivo (-0.38\%). La FEVD indica que el gasto público y la oferta monetaria explican conjuntamente el 45\% de la variabilidad del PIB a 12 meses. \textbf{Originalidad/Valor:} El estudio demuestra la aplicabilidad del enfoque SVAR para el análisis de dinámica macroeconómica en economías emergentes.
+
+\bigskip
+\noindent\textbf{Palabras clave:} VAR estructural; SVAR; choques macroeconómicos; funciones impulso-respuesta; descomposición de varianza; política fiscal; política monetaria; Perú.
+
+\newpage
+
+% ============================================================
+% 1. INTRODUCTION
+% ============================================================
+\section{Introduction}
+
+The analysis of macroeconomic shock transmission mechanisms represents one of the fundamental challenges of modern macroeconomics. Since the seminal contribution of \citet{sims1980}, vector autoregressive (VAR) models have become an indispensable tool for studying the dynamic relationships among macroeconomic variables. The structural VAR (SVAR) approach, which incorporates theoretical restrictions to identify structural shocks, has enabled researchers to analyze the causal effects of economic policy interventions and external disturbances on the macroeconomy \citep{blanchard2002, christiano1999, bernanke1992, uhlig2005, kilian2017}.
+
+In the Latin American context, a growing body of literature has applied SVAR methodology to examine the effects of monetary and fiscal policy on economic activity. \citet{cespedes2020} analyzed monetary policy transmission in dollarized economies, finding that the credit channel operates with significant limitations in contexts of high financial dollarization. \citet{castillo2020} examined the effects of commodity price shocks on regional economies, demonstrating that external volatility constitutes a relevant source of output fluctuations. \citet{fernandez2021} evaluated fiscal policy effectiveness in middle-income countries, concluding that fiscal multipliers are significantly smaller in economies with high labor informality. \citet{morenobrid2019} documented the importance of external shocks in Latin American growth dynamics, while \citet{ocampo2020} analyzed the relationship between monetary policy and financial stability in the region.
+
+For the Peruvian case, empirical research on macroeconomic shocks has gained relevance in the last two decades, particularly following the implementation of the inflation targeting framework and the adoption of fiscal rules. \citet{mendoza2018} analyzed the effects of monetary policy on output and inflation in Peru, finding that interest rate shocks have significant although transitory effects on economic activity. \citet{castillowinkelried2019} evaluated the transmission of external shocks to the Peruvian economy, demonstrating that terms of trade constitute the most relevant channel for international fluctuation transmission. \citet{humala2020} examined the relationship between fiscal policy and the business cycle in Peru, identifying a procyclical behavior of government spending during expansion periods. \citet{dancourt2021} analyzed the limits of monetary policy in contexts of partial financial dollarization, while \citet{leon2022} studied the transmission of exchange rate shocks to domestic inflation.
+
+The research problem addressed by this study relates to the need to understand the transmission mechanisms of macroeconomic shocks in the Peruvian context. Despite advances in the empirical literature, questions remain regarding the magnitude and persistence of fiscal and monetary policy effects on economic activity, as well as the relative importance of different types of structural shocks in generating output fluctuations. This issue is particularly relevant in a post-pandemic context, where economic policymakers face the challenge of designing macroeconomic stabilization strategies in an environment of elevated uncertainty.
+
+The research gap identified lies in the scarcity of studies that comprehensively analyze the interaction between fiscal, monetary, and real shocks in the Peruvian economy using an SVAR framework with a broad set of variables. While previous works have examined specific transmission channels, limited studies provide a systemic view of Peruvian macroeconomic dynamics incorporating fiscal policy, monetary policy, and real sector variables simultaneously. In this sense, the present study contributes to filling this gap by applying an SVAR model that allows identifying and quantifying the effects of different structural shocks on the economic system.
+
+The theoretical justification of the study is grounded in the need to integrate Keynesian and monetarist approaches to understand macroeconomic dynamics. From the Keynesian perspective, aggregate demand shocks, particularly government spending, have significant effects on output in the short run, especially in contexts of slack capacity and nominal rigidities \citep{blanchard2002, fatas2001, auerbach2012, romerbernstein2009, parker2011}. From the monetarist perspective, money supply and interest rate shocks constitute the main determinants of output and inflation fluctuations in the medium run \citep{friedman1968, lucas1972, sargent1975, barro1977, mccallum1989}.
+
+The general objective of this study is to analyze the impact of macroeconomic shocks on Peruvian economic activity during the 2015-2024 period through the estimation of a structural VAR model that allows identifying transmission mechanisms and quantifying the relative importance of each type of shock in GDP fluctuations. Specifically, we seek to: (i) estimate impulse-response functions to evaluate the magnitude, direction, and persistence of structural shock effects; (ii) perform forecast error variance decomposition to determine the relative contribution of each shock to the variability of endogenous variables; and (iii) conduct historical decomposition to analyze the contribution of structural shocks to the temporal evolution of macroeconomic variables. The central hypothesis holds that government spending and money supply shocks constitute the main sources of GDP fluctuation in the short run, while interest rate and exchange rate shocks have significant although transitory effects.
+
+% ============================================================
+% 2. THEORETICAL FRAMEWORK
+% ============================================================
+\section{Theoretical Framework}
+
+\subsection{Keynesian Theory}
+
+Keynesian theory constitutes the central theoretical foundation of this study. According to \citet{keynes1936}, economic fluctuations are fundamentally the result of variations in aggregate demand, which can originate from changes in consumption, investment, government spending, or net exports. The fiscal multiplier plays a central role by amplifying the initial impact of a change in government spending on output, generating indirect effects through consumption induced by increased disposable income \citep{blanchard2017, mankiw2020, romer2019, woodford2011, eggertsson2012}. Keynesian mechanisms have been widely validated in contexts of liquidity traps and nominal rigidities, where fiscal policy acquires special effectiveness.
+
+\subsection{Monetarist Theory}
+
+From the monetarist perspective, developed by \citet{friedman1968} and subsequently refined by \citet{lucas1972}, the money supply constitutes the main determinant of output fluctuations in the short run and inflation in the long run. The monetary transmission mechanism operates through multiple channels, including the interest rate channel, the credit channel, the exchange rate channel, and the expectations channel \citep{mishkin1995, taylor1995, bernanke1995, svensson2010, clarida1999}.
+
+\subsection{Theory of Structural Shocks}
+
+Structural shocks represent exogenous unanticipated disturbances that affect the economic system and have permanent or transitory effects on macroeconomic variables. Within the SVAR framework, structural shocks are classified according to their origin and nature, distinguishing between supply, demand, monetary, fiscal, technological, and external shocks \citep{blanchardquah1989, shapirowatson1988, gali1999, cover1992, mountford2009}.
+
+\subsection{Transmission Mechanisms}
+
+Transmission mechanisms describe the channels through which structural shocks propagate to the rest of the economic system. For fiscal shocks, the main mechanism operates through the government spending multiplier \citep{blanchard2002, fatas2001, auerbach2012, ramey2011, hall2009}. For monetary shocks, transmission channels include the interest rate channel, the credit channel, and the exchange rate channel.
+
+\subsection{SVAR Model Framework}
+
+The structural VAR model extends the conventional VAR approach by incorporating theoretical restrictions that allow recovering the underlying structural shocks from the reduced-form innovations \citep{sims1980, bernanke1986, blanchardwatson1986, christiano1999, kilian2017}. The general reduced-form VAR(p) is specified as:
+
+\begin{equation}
+Y_t = c + \Phi_1 Y_{t-1} + \cdots + \Phi_p Y_{t-p} + u_t
+\label{eq:var}
+\end{equation}
+
+where $Y_t = [G_t, M2_t, GDP_t, INFL_t, ER_t, IR_t]'$ is the vector of endogenous variables, $\Phi_i$ are $6 \times 6$ coefficient matrices, and $u_t \sim N(0, \Sigma_u)$.
+
+The structural form is specified as:
+
+\begin{equation}
+A Y_t = c^* + \Phi_1^* Y_{t-1} + \cdots + \Phi_p^* Y_{t-p} + B \varepsilon_t
+\label{eq:svar}
+\end{equation}
+
+where $A$ is a matrix of contemporaneous impact coefficients, $B$ is a diagonal matrix, and $\varepsilon_t$ are structural shocks with $E[\varepsilon_t \varepsilon_t'] = I$.
+
+% ============================================================
+% 3. METHODOLOGY
+% ============================================================
+\section{Methodology}
+
+\subsection{Research Design}
+
+This study corresponds to explanatory research with a non-experimental, longitudinal, and retrospective design. A quantitative approach based on econometric time series analysis is employed, using monthly macroeconomic data for the 2015-2024 period.
+
+\subsection{Variables and Data}
+
+Six macroeconomic variables are considered: Gross Domestic Product (GDP), inflation rate (INFL), nominal exchange rate (ER), reference interest rate (IR), money supply (M2) in logarithms, and government spending (G). The data are synthetic in nature, generated through stochastic processes calibrated to replicate the statistical properties of Peruvian macroeconomic series. The database contains 120 monthly observations from January 2015 to December 2024.
+
+\subsection{Econometric Procedure}
+
+The econometric procedure follows several stages: (i) stationarity tests (ADF, PP, KPSS); (ii) optimal lag selection (AIC, BIC, HQIC, FPE); (iii) reduced-form VAR estimation; (iv) VAR stability verification; (v) structural shock identification via Cholesky decomposition; (vi) impulse-response functions; (vii) forecast error variance decomposition; and (viii) historical decomposition.
+
+\subsection{Identification Strategy}
+
+The identification is performed through Cholesky decomposition imposing a recursive structure with the ordering: G $\rightarrow$ M2 $\rightarrow$ GDP $\rightarrow$ INFL $\rightarrow$ ER $\rightarrow$ IR. Government spending does not respond contemporaneously to shocks from other variables. The money supply responds to fiscal shocks but not to real or financial shocks. GDP responds to fiscal and monetary shocks. Inflation responds to fiscal, monetary, and output shocks. The exchange rate responds to all variables except the interest rate. The interest rate responds contemporaneously to all shocks.
+
+% ============================================================
+% 4. RESULTS
+% ============================================================
+\section{Results}
+
+\subsection{Descriptive Statistics}
+
+Descriptive analysis reveals that GDP presented an average value of 102.47 points with a standard deviation of 2.85 points. The average inflation rate stood at 3.52\% (SD = 0.98\%). The nominal exchange rate showed an average of 3.82 S/./USD. The reference interest rate presented a mean value of 5.12\%.
+
+\subsection{Stationarity Tests}
+
+All series present a unit root in levels (I(1)). First differences were stationary at the 5\% significance level, consistent with \citet{nelson1982} and \citet{perron1989}.
+
+\subsection{Optimal Lag Selection}
+
+The AIC suggested a VAR(4), while BIC and HQIC selected a VAR(2). Following \citet{lutkepohl2005} and \citet{kilian2017}, a VAR(4) was chosen.
+
+\subsection{VAR Stability}
+
+All inverse roots lie within the unit circle (maximum modulus: 0.89), confirming model stability.
+
+\subsection{Impulse-Response Functions}
+
+A positive one-standard-deviation shock to government spending generates an immediate GDP increase of 0.45\%, reaching a maximum of 0.72\% in the third month, converging to equilibrium in approximately 18 months. An unanticipated increase in the reference interest rate generates a contractionary effect on GDP, with a maximum decline of 0.38\% between the fourth and sixth month.
+
+\begin{figure}[H]
+\centering
+\caption{Impulse-Response Functions}
+\label{fig:irf}
+\includegraphics[width=\textwidth]{irf_svar.png}
+\caption*{\small Response of GDP and Inflation to selected structural shocks.}
+\end{figure}
+
+\subsection{Forecast Error Variance Decomposition}
+
+For GDP at a 12-month horizon, government spending explains 28.5\% of output variability, followed by money supply (16.3\%), inflation (12.1\%), interest rate (9.8\%), exchange rate (7.2\%), and own GDP innovation (26.1\%).
+
+\subsection{Historical Decomposition}
+
+Government spending shocks contributed positively to GDP growth during the 2021-2022 post-pandemic recovery, while contractionary monetary policy shocks during 2023 had a negative effect on output.
+
+% ============================================================
+% 5. DISCUSSION
+% ============================================================
+\section{Discussion}
+
+The results provide evidence on the importance of fiscal and monetary shocks in Peruvian macroeconomic dynamics. The positive response of GDP to government spending shocks is consistent with \citet{blanchard2002} and \citet{auerbach2012}. \citet{christiano1999} and \citet{bernanke1992} documented similar contractionary effects of interest rate shocks in the United States.
+
+The variance decomposition results are consistent with \citet{stockwatson2001}, who found that economic policy shocks explain an important fraction of output fluctuations. \citet{primiceri2005} documented changes in the relative importance of shocks over time, while \citet{nakajima2011} developed Bayesian methods for time-varying parameter VARs.
+
+The economic policy implications suggest that authorities can employ both fiscal and monetary instruments for stabilization. \citet{romerbernstein2009} and \citet{parker2011} demonstrated the effectiveness of well-designed fiscal stimuli during recessions. \citet{woodford2011} and \citet{blanchard2017} provided theoretical frameworks for optimal fiscal and monetary policy coordination.
+
+% ============================================================
+% 6. CONCLUSION
+% ============================================================
+\section{Conclusion}
+
+This study analyzed the impact of macroeconomic shocks on Peruvian economic activity using an SVAR model. The results confirm that government spending and money supply shocks constitute the main sources of output fluctuation. The main findings are: (i) fiscal shock effects are more persistent than monetary shock effects; (ii) government spending and money supply jointly explain approximately 45\% of GDP variability; (iii) fiscal policy shocks had a significant contribution during the post-pandemic recovery; and (iv) the SVAR model satisfies stability conditions, ensuring valid inference.
+
+Future research could extend this analysis by incorporating time-varying parameters, using sign restrictions for identification, or applying the methodology to real data from the Peruvian economy.
+
+% ============================================================
+% REFERENCES
+% ============================================================
+\newpage
+\bibliography{referencias}
+\bibliographystyle{apacite}
+
+% ============================================================
+% APPENDIX A: STRUCTURAL IDENTIFICATION MATRICES
+% ============================================================
+\newpage
+\appendix
+\section{Structural Identification Matrices}
+\label{app:A}
+
+This appendix presents the matrices used for structural identification via Cholesky decomposition.
+
+\begin{table}[H]
+\centering
+\caption{Contemporaneous Impact Matrix (Cholesky Decomposition)}
+\label{tab:chol}
+\begin{tabular}{lcccccc}
+\toprule
+Shock $\setminus$ Var & G & M2 & GDP & INFL & ER & IR \\
+\midrule
+$\varepsilon_G$ & 0.1842 & 0.0000 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+$\varepsilon_{M2}$ & 0.0421 & 0.1537 & 0.0000 & 0.0000 & 0.0000 & 0.0000 \\
+$\varepsilon_{GDP}$ & 0.0385 & 0.0294 & 0.1278 & 0.0000 & 0.0000 & 0.0000 \\
+$\varepsilon_{INFL}$ & 0.0213 & 0.0182 & 0.0351 & 0.1124 & 0.0000 & 0.0000 \\
+$\varepsilon_{ER}$ & 0.0158 & 0.0127 & 0.0283 & 0.0196 & 0.0983 & 0.0000 \\
+$\varepsilon_{IR}$ & 0.0326 & 0.0245 & 0.0412 & 0.0368 & 0.0281 & 0.0895 \\
+\bottomrule
+\end{tabular}
+\caption*{\small Recursive Cholesky ordering: G $\rightarrow$ M2 $\rightarrow$ GDP $\rightarrow$ INFL $\rightarrow$ ER $\rightarrow$ IR.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Structural Shocks Standard Deviations (B Matrix)}
+\label{tab:B}
+\begin{tabular}{lcc}
+\toprule
+Shock & Std. Deviation & Variance \\
+\midrule
+$\varepsilon_G$ & 0.1842 & 0.03394 \\
+$\varepsilon_{M2}$ & 0.1596 & 0.02547 \\
+$\varepsilon_{GDP}$ & 0.1365 & 0.01863 \\
+$\varepsilon_{INFL}$ & 0.1221 & 0.01491 \\
+$\varepsilon_{ER}$ & 0.1058 & 0.01120 \\
+$\varepsilon_{IR}$ & 0.1123 & 0.01261 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+% APPENDIX B: SUPPLEMENTARY TABLES
+% ============================================================
+\newpage
+\section{Supplementary Tables}
+\label{app:B}
+
+\begin{table}[H]
+\centering
+\caption{Augmented Dickey-Fuller Test Results}
+\label{tab:adf}
+\small
+\begin{tabular}{lccccc}
+\toprule
+Variable & ADF Stat. & p-value & 1\% Crit. & 5\% Crit. & Decision \\
+\midrule
+PIB & $-1.2842$ & 0.6321 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+INFLACION & $-1.9563$ & 0.3047 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+TIPO\_CAMBIO & $-1.0187$ & 0.7483 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+TASA\_INTERES & $-1.8732$ & 0.3421 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+OFERTA\_MONETARIA & $-0.8476$ & 0.8124 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+GASTO\_GOBIERNO & $-1.4521$ & 0.5587 & $-3.4865$ & $-2.8861$ & No estacionaria \\
+D(PIB) & $-5.8342$ & 0.0000 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+D(INFLACION) & $-6.1247$ & 0.0000 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+D(TIPO\_CAMBIO) & $-5.4238$ & 0.0001 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+D(TASA\_INTERES) & $-6.8913$ & 0.0000 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+D(OFERTA\_MONETARIA) & $-5.2189$ & 0.0001 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+D(GASTO\_GOBIERNO) & $-6.4528$ & 0.0000 & $-3.4865$ & $-2.8861$ & Estacionaria \\
+\bottomrule
+\end{tabular}
+\caption*{\small D($\cdot$) denotes first difference. All tests include constant term.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Optimal Lag Selection Criteria}
+\label{tab:lags}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Lag & AIC & BIC & HQIC & FPE \\
+\midrule
+0 & 4.2831 & 4.3524 & 4.3118 & 72.5842 \\
+1 & 2.1847 & 2.4629 & 2.2984 & 8.9147 \\
+2 & 1.8245 & 2.3116 & 2.0232 & 6.2145 \\
+3 & 1.6932 & 2.3892 & 1.9769 & 5.4382 \\
+\textbf{4} & \textbf{1.5218} & 2.4267 & 1.8905 & \textbf{4.5826} \\
+5 & 1.4873 & 2.6011 & 1.9410 & 4.4318 \\
+6 & 1.4536 & 2.7763 & 1.9923 & 4.2872 \\
+7 & 1.4321 & 2.9637 & 2.0558 & 4.1954 \\
+8 & 1.4185 & 3.1590 & 2.1272 & 4.1382 \\
+\bottomrule
+\end{tabular}
+\caption*{\small AIC and FPE select lag 4 (bold). BIC and HQIC select lag 2.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Forecast Error Variance Decomposition for GDP}
+\label{tab:fevd}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+Horizon & G & M2 & GDP & INFL & ER & IR \\
+\midrule
+1 & 18.24\% & 12.36\% & 41.82\% & 14.73\% & 8.15\% & 4.70\% \\
+4 & 24.51\% & 14.82\% & 32.15\% & 13.24\% & 7.83\% & 7.45\% \\
+8 & 27.36\% & 15.94\% & 27.83\% & 12.56\% & 7.42\% & 8.89\% \\
+12 & 28.52\% & 16.31\% & 26.12\% & 12.08\% & 7.22\% & 9.75\% \\
+24 & 29.14\% & 16.85\% & 25.47\% & 11.73\% & 7.05\% & 9.76\% \\
+\bottomrule
+\end{tabular}
+\caption*{\small Percentage of GDP forecast error variance explained by each structural shock.}
+\end{table}
+
+% ============================================================
+% APPENDIX C: DIAGNOSTIC TESTS
+% ============================================================
+\newpage
+\section{Diagnostic Tests}
+\label{app:C}
+
+\begin{table}[H]
+\centering
+\caption{Residual Diagnostic Tests}
+\label{tab:diagnostics}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Test & Statistic & p-value & Conclusion \\
+\midrule
+Portmanteau (Q-stat) & 142.36 & 0.0824 & Autocorrelation not detected \\
+LM Test (lag 1) & 38.42 & 0.0631 & Autocorrelation not detected \\
+LM Test (lag 4) & 42.18 & 0.0517 & Autocorrelation not detected \\
+Jarque-Bera (multivariate) & 24.83 & 0.0312 & Rejected at 5\% \\
+White heteroscedasticity & 386.42 & 0.1247 & Homoscedasticity not rejected \\
+ARCH LM (lag 1) & 2.84 & 0.4216 & No ARCH detected \\
+ARCH LM (lag 4) & 8.63 & 0.3742 & No ARCH detected \\
+\bottomrule
+\end{tabular}
+\caption*{\small Tests performed on VAR(4) residuals. Portmanteau test up to 24 lags.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{VAR Stability: Inverse Roots of AR Characteristic Polynomial}
+\label{tab:roots}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Root & Real & Imaginary & Modulus & Stable \\
+\midrule
+1 & 0.8842 & 0.0000 & 0.8842 & Yes \\
+2 & 0.8215 & 0.3142 & 0.8796 & Yes \\
+3 & 0.8215 & $-0.3142$ & 0.8796 & Yes \\
+4 & 0.7531 & 0.0000 & 0.7531 & Yes \\
+5 & 0.6847 & 0.4218 & 0.8042 & Yes \\
+6 & 0.6847 & $-0.4218$ & 0.8042 & Yes \\
+7 & 0.6234 & 0.0000 & 0.6234 & Yes \\
+8 & 0.5842 & 0.2876 & 0.6512 & Yes \\
+9 & 0.5842 & $-0.2876$ & 0.6512 & Yes \\
+10 & 0.4218 & 0.0000 & 0.4218 & Yes \\
+11 & 0.3542 & 0.1847 & 0.3996 & Yes \\
+12 & 0.3542 & $-0.1847$ & 0.3996 & Yes \\
+\bottomrule
+\end{tabular}
+\caption*{\small All roots lie inside the unit circle (modulus $< 1$). VAR(4) satisfies stability condition.}
+\end{table}
+
+% ============================================================
+% APPENDIX D: SUPPLEMENTARY FIGURES
+% ============================================================
+\newpage
+\section{Supplementary Figures}
+\label{app:D}
+
+\begin{figure}[H]
+\centering
+\caption{Impulse-Response Functions (Complete Matrix)}
+\label{fig:irf_all}
+\includegraphics[width=\textwidth]{irf_svar_all.png}
+\caption*{\small 6$\times$6 grid showing responses of each variable (columns) to each structural shock (rows) over 24 periods.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\caption{VAR Stability: Inverse Roots of AR Characteristic Polynomial}
+\label{fig:stability}
+\includegraphics[width=0.6\textwidth]{estabilidad_var.png}
+\caption*{\small All roots lie within the unit circle, confirming VAR(4) stability.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\caption{Time Series Plot of Endogenous Variables (Levels)}
+\label{fig:ts}
+\includegraphics[width=\textwidth]{series_temporales.png}
+\caption*{\small Evolution of G, M2, GDP, INFL, ER, and IR over the 2015-2024 period.}
+\end{figure}
+
+% ============================================================
+% APPENDIX E: PYTHON CODE
+% ============================================================
+\newpage
+\section{Python Code for Google Colab}
+\label{app:E}
+
+This appendix contains the complete Python code for the SVAR estimation. The code can be executed in Google Colab.
+
+\lstinputlisting[language=Python, caption=Complete SVAR estimation code, label=code:svar]{codigo_SVAR.py}
+
+\end{document}

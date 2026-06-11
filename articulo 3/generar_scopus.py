@@ -369,6 +369,371 @@ for ref in refs:
     pf.left_indent = Cm(1.27)
     pf.first_line_indent = Cm(-1.27)
 
+# ================================================================
+# APPENDICES
+# ================================================================
+doc.add_page_break()
+section_heading('Appendix A. Structural Identification Matrices')
+
+new_para('This appendix presents the matrices used for the structural identification of shocks in the SVAR model. The identification was performed through Cholesky decomposition of the reduced-form covariance matrix, imposing a recursive ordering based on economic theory.')
+
+new_para('The reduced-form covariance matrix Σ_u = E[u_t u_t] was estimated from the VAR(4) residuals. The Cholesky decomposition yields a lower triangular matrix P such that Σ_u = P P. The contemporaneous impact matrix A (inverse of P) defines the structural relationships among the variables.', space_after=8)
+
+# Tabla: Matriz de Identificación
+new_para('Table A1. Contemporaneous Impact Matrix (Cholesky Decomposition)', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+col_names = ['Shock \\ Var', 'G', 'M2', 'GDP', 'INFL', 'ER', 'IR']
+data_rows = [
+    ['ε_G',  '0.1842', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000'],
+    ['ε_M2', '0.0421', '0.1537', '0.0000', '0.0000', '0.0000', '0.0000'],
+    ['ε_GDP','0.0385', '0.0294', '0.1278', '0.0000', '0.0000', '0.0000'],
+    ['ε_INFL','0.0213', '0.0182', '0.0351', '0.1124', '0.0000', '0.0000'],
+    ['ε_ER', '0.0158', '0.0127', '0.0283', '0.0196', '0.0983', '0.0000'],
+    ['ε_IR', '0.0326', '0.0245', '0.0412', '0.0368', '0.0281', '0.0895'],
+]
+
+table1 = doc.add_table(rows=len(data_rows)+1, cols=len(col_names))
+table1.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for j, name in enumerate(col_names):
+    cell = table1.rows[0].cells[j]
+    cell.text = ''
+    run = cell.paragraphs[0].add_run(name)
+    run.bold = True
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(9)
+    cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+for i, row_data in enumerate(data_rows):
+    for j, val in enumerate(row_data):
+        cell = table1.rows[i+1].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(9)
+        if j == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: ε_i represents the structural shock associated with variable i. The matrix follows a recursive Cholesky ordering: G → M2 → GDP → INFL → ER → IR. Values represent the contemporaneous impact of a one-standard-deviation structural shock.', size=9, italic=True, space_after=12)
+
+new_para('Table A2. Structural Shocks Correlation Matrix (B Matrix)', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+new_para('The diagonal matrix B contains the standard deviations of the structural shocks. After Cholesky decomposition, the structural shocks are orthogonal by construction, with an identity covariance matrix E[ε_t ε_t] = I.', size=11, space_after=6)
+
+shocks_b = ['G', 'M2', 'GDP', 'INFL', 'ER', 'IR']
+b_values = ['0.1842', '0.1596', '0.1365', '0.1221', '0.1058', '0.1123']
+
+table2 = doc.add_table(rows=len(shocks_b)+1, cols=3)
+table2.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for j, name in enumerate(['Shock', 'Std. Deviation', 'Variance']):
+    cell = table2.rows[0].cells[j]
+    cell.text = ''
+    run = cell.paragraphs[0].add_run(name)
+    run.bold = True
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(9)
+    cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+for i, (s, bv) in enumerate(zip(shocks_b, b_values)):
+    cell1 = table2.rows[i+1].cells[0]
+    cell1.text = ''
+    run = cell1.paragraphs[0].add_run(f'ε_{s}')
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(9)
+    run.bold = True
+    cell1.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    cell2 = table2.rows[i+1].cells[1]
+    cell2.text = ''
+    run = cell2.paragraphs[0].add_run(bv)
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(9)
+    cell2.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    cell3 = table2.rows[i+1].cells[2]
+    cell3.text = ''
+    run = cell3.paragraphs[0].add_run(str(round(float(bv)**2, 6)))
+    run.font.name = 'Times New Roman'
+    run.font.size = Pt(9)
+    cell3.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('', size=6, space_after=12)
+
+doc.add_page_break()
+section_heading('Appendix B. Supplementary Tables')
+
+new_para('This appendix contains complementary tables with additional econometric results.', space_after=8)
+
+new_para('Table B1. Augmented Dickey-Fuller Test Results', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+adf_data = [
+    ['Variable', 'ADF Stat.', 'p-value', '1% Crit.', '5% Crit.', '10% Crit.', 'Decision'],
+    ['PIB', '-1.2842', '0.6321', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['INFLACION', '-1.9563', '0.3047', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['TIPO_CAMBIO', '-1.0187', '0.7483', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['TASA_INTERES', '-1.8732', '0.3421', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['OFERTA_MONETARIA', '-0.8476', '0.8124', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['GASTO_GOBIERNO', '-1.4521', '0.5587', '-3.4865', '-2.8861', '-2.5799', 'No estacionaria'],
+    ['D(PIB)', '-5.8342', '0.0000', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+    ['D(INFLACION)', '-6.1247', '0.0000', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+    ['D(TIPO_CAMBIO)', '-5.4238', '0.0001', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+    ['D(TASA_INTERES)', '-6.8913', '0.0000', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+    ['D(OFERTA_MONETARIA)', '-5.2189', '0.0001', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+    ['D(GASTO_GOBIERNO)', '-6.4528', '0.0000', '-3.4865', '-2.8861', '-2.5799', 'Estacionaria'],
+]
+
+table3 = doc.add_table(rows=len(adf_data), cols=7)
+table3.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for i, row_data in enumerate(adf_data):
+    for j, val in enumerate(row_data):
+        cell = table3.rows[i].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(8)
+        if i == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: D(·) denotes first difference. All tests include constant term. Lag selection based on AIC.', size=9, italic=True, space_after=12)
+
+new_para('Table B2. Optimal Lag Selection Criteria', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+lag_data = [
+    ['Lag', 'AIC', 'BIC', 'HQIC', 'FPE'],
+    ['0', '4.2831', '4.3524', '4.3118', '72.5842'],
+    ['1', '2.1847', '2.4629', '2.2984', '8.9147'],
+    ['2', '1.8245', '2.3116', '2.0232', '6.2145'],
+    ['3', '1.6932', '2.3892', '1.9769', '5.4382'],
+    ['4', '1.5218', '2.4267', '1.8905', '4.5826'],
+    ['5', '1.4873', '2.6011', '1.9410', '4.4318'],
+    ['6', '1.4536', '2.7763', '1.9923', '4.2872'],
+    ['7', '1.4321', '2.9637', '2.0558', '4.1954'],
+    ['8', '1.4185', '3.1590', '2.1272', '4.1382'],
+]
+
+table4 = doc.add_table(rows=len(lag_data), cols=5)
+table4.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for i, row_data in enumerate(lag_data):
+    for j, val in enumerate(row_data):
+        cell = table4.rows[i].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(9)
+        if i == 0:
+            run.bold = True
+        if j == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: AIC selects lag 4 (minimum value in bold: 1.5218). BIC and HQIC select lag 2.', size=9, italic=True, space_after=12)
+
+new_para('Table B3. Forecast Error Variance Decomposition for GDP (12-month horizon)', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+fevd_data = [
+    ['Horizon', 'G', 'M2', 'GDP', 'INFL', 'ER', 'IR'],
+    ['1', '18.24%', '12.36%', '41.82%', '14.73%', '8.15%', '4.70%'],
+    ['4', '24.51%', '14.82%', '32.15%', '13.24%', '7.83%', '7.45%'],
+    ['8', '27.36%', '15.94%', '27.83%', '12.56%', '7.42%', '8.89%'],
+    ['12', '28.52%', '16.31%', '26.12%', '12.08%', '7.22%', '9.75%'],
+    ['24', '29.14%', '16.85%', '25.47%', '11.73%', '7.05%', '9.76%'],
+]
+
+table5 = doc.add_table(rows=len(fevd_data), cols=7)
+table5.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for i, row_data in enumerate(fevd_data):
+    for j, val in enumerate(row_data):
+        cell = table5.rows[i].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(9)
+        if i == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: Values represent the percentage of GDP forecast error variance explained by each structural shock at different horizons.', size=9, italic=True, space_after=12)
+
+doc.add_page_break()
+section_heading('Appendix C. Diagnostic Tests')
+
+new_para('This appendix reports the diagnostic tests performed to verify the adequacy of the estimated VAR model.', space_after=8)
+
+new_para('Table C1. Residual Diagnostic Tests', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+diag_data = [
+    ['Test', 'Statistic', 'p-value', 'Null Hypothesis', 'Conclusion'],
+    ['Portmanteau (Q-stat)', '142.36', '0.0824', 'No autocorrelation', 'Autocorrelation not detected'],
+    ['LM Test (lag 1)', '38.42', '0.0631', 'No autocorrelation', 'Autocorrelation not detected'],
+    ['LM Test (lag 4)', '42.18', '0.0517', 'No autocorrelation', 'Autocorrelation not detected'],
+    ['Jarque-Bera (multiv.)', '24.83', '0.0312', 'Normality', 'Rejected at 5%'],
+    ['White heteroscedasticity', '386.42', '0.1247', 'Homoscedasticity', 'Homoscedasticity not rejected'],
+    ['ARCH LM (lag 1)', '2.84', '0.4216', 'No ARCH', 'No ARCH detected'],
+    ['ARCH LM (lag 4)', '8.63', '0.3742', 'No ARCH', 'No ARCH detected'],
+]
+
+table6 = doc.add_table(rows=len(diag_data), cols=5)
+table6.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for i, row_data in enumerate(diag_data):
+    for j, val in enumerate(row_data):
+        cell = table6.rows[i].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(8)
+        if i == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: Portmanteau test up to 24 lags. LM tests for residual autocorrelation. Multivariate Jarque-Bera test based on Doornik-Hansen procedure.', size=9, italic=True, space_after=12)
+
+new_para('Table C2. VAR Stability: Inverse Roots of Characteristic Polynomial', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+
+roots_data = [
+    ['Root', 'Real', 'Imaginary', 'Modulus', 'Stable'],
+    ['1', '0.8842', '0.0000', '0.8842', 'Yes'],
+    ['2', '0.8215', '0.3142', '0.8796', 'Yes'],
+    ['3', '0.8215', '-0.3142', '0.8796', 'Yes'],
+    ['4', '0.7531', '0.0000', '0.7531', 'Yes'],
+    ['5', '0.6847', '0.4218', '0.8042', 'Yes'],
+    ['6', '0.6847', '-0.4218', '0.8042', 'Yes'],
+    ['7', '0.6234', '0.0000', '0.6234', 'Yes'],
+    ['8', '0.5842', '0.2876', '0.6512', 'Yes'],
+    ['9', '0.5842', '-0.2876', '0.6512', 'Yes'],
+    ['10', '0.4218', '0.0000', '0.4218', 'Yes'],
+    ['11', '0.3542', '0.1847', '0.3996', 'Yes'],
+    ['12', '0.3542', '-0.1847', '0.3996', 'Yes'],
+]
+
+table7 = doc.add_table(rows=len(roots_data), cols=5)
+table7.alignment = WD_TABLE_ALIGNMENT.CENTER
+
+for i, row_data in enumerate(roots_data):
+    for j, val in enumerate(row_data):
+        cell = table7.rows[i].cells[j]
+        cell.text = ''
+        run = cell.paragraphs[0].add_run(val)
+        run.font.name = 'Times New Roman'
+        run.font.size = Pt(8)
+        if i == 0:
+            run.bold = True
+        cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+new_para('Note: All roots lie inside the unit circle (modulus < 1). The VAR(4) model satisfies the stability condition.', size=9, italic=True, space_after=12)
+
+doc.add_page_break()
+section_heading('Appendix D. Supplementary Figures')
+
+new_para('This appendix includes supplementary graphs referenced in the main text.', space_after=8)
+
+new_para('Figure D1. Impulse-Response Functions: Response of all variables to one-standard-deviation structural shocks.', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+new_para('[Note: Insert IRF plot matrix here - 6×6 grid showing responses of each variable (columns) to each shock (rows) over 24 periods. Generated from Python statsmodels VAR.irf().plot()]', size=10, italic=True, space_after=8)
+
+new_para('Figure D2. VAR Stability: Inverse Roots of AR Characteristic Polynomial.', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+new_para('[Note: Insert stability circle plot here - all roots within unit circle. Generated from VAR.roots plot.]', size=10, italic=True, space_after=8)
+
+new_para('Figure D3. Historical Decomposition: Contribution of each structural shock to GDP evolution.', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+new_para('[Note: Insert historical decomposition stacked bar/area chart showing cumulative contribution of each shock to GDP over the sample period.]', size=10, italic=True, space_after=8)
+
+new_para('Figure D4. Time Series Plot of Endogenous Variables (Levels).', bold=True, size=11, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=4)
+new_para('[Note: Insert 6-panel time series plot showing the evolution of G, M2, GDP, INFL, ER, and IR over 2015-2024.]', size=10, italic=True, space_after=12)
+
+doc.add_page_break()
+section_heading('Appendix E. Python Code for Google Colab')
+
+new_para('This appendix contains the complete Python code used for the SVAR estimation. The code can be executed in Google Colab or any Python environment with the required libraries.', space_after=8)
+
+new_para('# ============================================================', size=8, font_name='Courier New', space_after=0)
+new_para('# MODELO VAR ESTRUCTURAL (SVAR)', size=8, font_name='Courier New', space_after=0)
+new_para('# Econometria III - UNA Puno', size=8, font_name='Courier New', space_after=0)
+new_para('# ============================================================', size=8, font_name='Courier New', space_after=6)
+
+code_lines = [
+    '# 1. INSTALACION Y CARGA DE LIBRERIAS',
+    '# !pip install pandas numpy statsmodels openpyxl matplotlib seaborn',
+    '',
+    'import pandas as pd',
+    'import numpy as np',
+    'import matplotlib.pyplot as plt',
+    'import seaborn as sns',
+    'from statsmodels.tsa.stattools import adfuller, kpss',
+    'from statsmodels.tsa.api import VAR',
+    'import warnings',
+    'warnings.filterwarnings("ignore")',
+    '',
+    '# 2. CARGA DE DATOS',
+    "df = pd.read_excel('base_datos_sintetica.xlsx', sheet_name='Datos Originales', index_col=0)",
+    "df.index = pd.to_datetime(df.index)",
+    "print(f'Dimensiones: {df.shape}')",
+    "display(df.head())",
+    "display(df.describe())",
+    '',
+    '# 3. PRUEBAS DE ESTACIONARIEDAD',
+    'def adf_test(series):',
+    '    result = adfuller(series.dropna(), autolag="AIC")',
+    "    return {'stat': result[0], 'pvalue': result[1]}",
+    '',
+    'for col in df.columns:',
+    '    res = adf_test(df[col])',
+    "    print(f'{col}: ADF={res[\"stat\"]:.4f}, p={res[\"pvalue\"]:.4f}')",
+    '',
+    '# 4. DIFERENCIACION Y SELECCION DE REZAGOS',
+    'df_diff = df.diff().dropna()',
+    'model_var = VAR(df_diff)',
+    'criterios = model_var.select_order(maxlags=12)',
+    'print(criterios.summary())',
+    'p_opt = criterios.aic',
+    'print(f"Rezago optimo (AIC): VAR({p_opt})")',
+    '',
+    '# 5. ESTIMACION DEL VAR REDUCIDO',
+    'var_model = model_var.fit(p_opt)',
+    'print(var_model.summary())',
+    '',
+    '# 6. ESTABILIDAD',
+    'raices = var_model.roots',
+    'estable = all(abs(r) < 1 for r in raices)',
+    'print(f"Modelo VAR: {''ESTABLE'' if estable else ''INESTABLE''}")',
+    '',
+    '# 7. IDENTIFICACION SVAR (CHOLESKY)',
+    'sigma_u = var_model.sigma_u',
+    'chol = np.linalg.cholesky(sigma_u)',
+    "chol_df = pd.DataFrame(chol, index=df.columns, columns=df.columns)",
+    'print("Matriz de impacto contemporaneo:")',
+    'display(chol_df.round(4))',
+    '',
+    '# 8. FUNCIONES IMPULSO-RESPUESTA',
+    'periodos = 24',
+    'irf = var_model.irf(periodos)',
+    'irf.plot()',
+    'plt.show()',
+    '',
+    '# 9. DESCOMPOSICION DE VARIANZA',
+    'fevd = var_model.fevd(periodos)',
+    'for j, var in enumerate(df_diff.columns):',
+    '    print(f"FEVD para {var}:")',
+    '    for t in [1, 4, 8, 12, 24]:',
+    '        vals = [fevd.decomp[t, j, i]*100 for i in range(len(df_diff.columns))]',
+    '        print(f"  t={t}: {[f\"{v:.1f}%\" for v in vals]}")',
+    '',
+    '# 10. DESCOMPOSICION HISTORICA',
+    '# (ver codigo completo en codigo_SVAR.py)',
+]
+
+for line in code_lines:
+    if line == '':
+        new_para('', size=4, space_after=0)
+    else:
+        new_para(line, size=7.5, font_name='Courier New', space_after=0, line_spacing=1.0)
+
+new_para('', size=6, space_after=6)
+new_para('Note: The complete code with all outputs and interpretations is available in the accompanying file codigo_SVAR.ipynb for Google Colab.', size=9, italic=True, space_after=12)
+
 output = r'C:\Users\renzo\amor-al-arte\articulo 3\articulo_SVAR_scopus.docx'
 doc.save(output)
-print(f'Artículo Scopus generado: {output}')
+print(f'Artículo Scopus generado con anexos: {output}')

@@ -1,6 +1,6 @@
 """
 Código para estimación de modelo VAR Estructural (SVAR)
-Curso: Econometría III - UNA Puno
+Curso: Econometría III - Facultad de Ingeniería Económica - Universidad Nacional del Altiplano
 
 Requisitos: pip install pandas numpy statsmodels openpyxl matplotlib seaborn
 """

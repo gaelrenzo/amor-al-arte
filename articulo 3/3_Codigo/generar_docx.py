@@ -77,7 +77,7 @@ def add_table_with_data(headers, rows, caption_text):
 add_title("Choques Macroeconómicos y su Impacto en la Inflación y el Crecimiento Económico en Perú: Un Análisis SVAR para el Período 2000–2024")
 p = doc.add_paragraph()
 p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-run = p.add_run("Estudiante de Economía\nFacultad de Ingeniería Económica, Universidad Nacional del Altiplano\n[enlace al archivo de Google Colab]")
+run = p.add_run("Estudiante de Ingeniería Económica\nFacultad de Ingeniería Económica, Universidad Nacional del Altiplano\n[enlace al archivo de Google Colab]")
 run.font.size = Pt(12)
 run.font.name = 'Times New Roman'
 
@@ -346,5 +346,5 @@ for ref in refs:
     p.paragraph_format.left_indent = Cm(1.27)
     p.paragraph_format.first_line_indent = Cm(-1.27)
 
-doc.save('/mnt/sdcard/universida-datos/articulo_scopus.docx')
+doc.save(r'C:\Users\renzo\amor-al-arte\articulo 3\1_Articulo\articulo_SVAR.docx')
 print("DOCX generated successfully!")

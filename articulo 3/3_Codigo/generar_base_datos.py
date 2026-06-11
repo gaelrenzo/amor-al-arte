@@ -130,6 +130,6 @@ for row_idx, (key, val) in enumerate(meta_info, 1):
     ws_meta.column_dimensions['A'].width = 35
     ws_meta.column_dimensions['B'].width = 80
 
-output = r'C:\Users\renzo\amor-al-arte\articulo 3\base_datos_sintetica.xlsx'
+output = r'C:\Users\renzo\amor-al-arte\articulo 3\2_Datos\base_datos_sintetica.xlsx'
 wb.save(output)
 print(f'Base de datos generada: {output}')

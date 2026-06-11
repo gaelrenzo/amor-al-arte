@@ -651,7 +651,7 @@ new_para('This appendix contains the complete Python code used for the SVAR esti
 
 new_para('# ============================================================', size=8, font_name='Courier New', space_after=0)
 new_para('# MODELO VAR ESTRUCTURAL (SVAR)', size=8, font_name='Courier New', space_after=0)
-new_para('# Econometria III - UNA Puno', size=8, font_name='Courier New', space_after=0)
+new_para('# Econometria III - Facultad de Ingeniería Económica - Universidad Nacional del Altiplano', size=8, font_name='Courier New', space_after=0)
 new_para('# ============================================================', size=8, font_name='Courier New', space_after=6)
 
 code_lines = [
@@ -734,6 +734,6 @@ for line in code_lines:
 new_para('', size=6, space_after=6)
 new_para('Note: The complete code with all outputs and interpretations is available in the accompanying file codigo_SVAR.ipynb for Google Colab.', size=9, italic=True, space_after=12)
 
-output = r'C:\Users\renzo\amor-al-arte\articulo 3\articulo_SVAR_scopus.docx'
+output = r'C:\Users\renzo\amor-al-arte\articulo 3\1_Articulo\articulo_SVAR_scopus.docx'
 doc.save(output)
 print(f'Artículo Scopus generado con anexos: {output}')

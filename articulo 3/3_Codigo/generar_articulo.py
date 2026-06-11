@@ -362,6 +362,6 @@ referencias = [
 for ref in referencias:
     add_referencia(ref)
 
-output = r'C:\Users\renzo\amor-al-arte\articulo 3\articulo_SVAR.docx'
+output = r'C:\Users\renzo\amor-al-arte\articulo 3\1_Articulo\articulo_SVAR.docx'
 doc.save(output)
 print(f'Artículo generado: {output}')

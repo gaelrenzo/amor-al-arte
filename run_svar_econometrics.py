@@ -11,7 +11,7 @@ from statsmodels.tsa.stattools import adfuller
 np.random.seed(42)
 
 # 1. Simulate Macroeconomic Data for Peru (2005Q1 to 2025Q4 = 84 quarters)
-dates = pd.date_range(start="2005-03-31", end="2025-12-31", freq="Q")
+dates = pd.date_range(start="2005-03-31", end="2025-12-31", freq="QE")
 N = len(dates)
 
 # We want to simulate a VAR(2) process for:
@@ -195,9 +195,22 @@ B_mask = np.array([
 svar_model = SVAR(data_var, svar_type='B', B=B_mask)
 svar_results = svar_model.fit(maxlags=p)
 print("\n--- SVAR Estimation Results ---")
-print(svar_results.summary())
+B_est = svar_results.B
+print("\nEstimated B Matrix (Impact Matrix):")
+print(B_est)
+np.savetxt("svar_B_matrix.csv", B_est, delimiter=",")
+
 with open("svar_summary.txt", "w") as f:
-    f.write(str(svar_results.summary()))
+    f.write("SVAR Estimation Results\n")
+    f.write("========================\n")
+    f.write("SVAR Type: B (A is restricted to Identity Matrix)\n\n")
+    f.write("Estimated B Matrix (Impact of Structural Shocks on Reduced-Form Residuals):\n")
+    f.write(np.array2string(B_est, precision=4, separator=', '))
+    f.write("\n\nStandard Errors of B:\n")
+    if hasattr(svar_results, 'bse_B') and svar_results.bse_B is not None:
+        f.write(np.array2string(svar_results.bse_B, precision=4, separator=', '))
+    else:
+        f.write("Not available")
 
 # Extract estimated B matrix
 B_est = svar_results.B
@@ -208,14 +221,14 @@ np.savetxt("svar_B_matrix.csv", B_est, delimiter=",")
 # 5. Impulse Response Functions (IRFs)
 irf = svar_results.irf(periods=20)
 
-fig_irf = irf.plot(orth=True, fig_size=(10, 8))
+fig_irf = irf.plot(orth=False, figsize=(10, 8))
 plt.suptitle('Funciones Impulso-Respuesta Estructurales (SVAR)', y=1.02, fontsize=14)
 plt.tight_layout()
 plt.savefig("graficos_irf_all.png", dpi=300)
 plt.close()
 
 irf_values = irf.svar_irfs
-stderr_values = irf.stderr(orth=True)
+stderr_values = irf.stderr(orth=False)
 
 periods = 20
 t_range = np.arange(periods + 1)
@@ -259,8 +272,20 @@ df_irf_val = pd.DataFrame(irf_df_list)
 df_irf_val.to_csv("irf_valores.csv", index=False)
 
 # 6. Forecast Error Variance Decomposition (FEVD)
-fevd = svar_results.fevd(periods=10)
-fevd_values = fevd.decomp
+# Manually compute FEVD to bypass statsmodels SVARResult bug
+periods_fevd = 10
+fevd_values = np.zeros((4, periods_fevd, 4))
+
+for i in range(4): # for each response variable
+    for h_fevd in range(periods_fevd): # for each horizon
+        cum_sq_resp = np.zeros(4)
+        for s in range(4): # for each structural shock
+            cum_sq_resp[s] = np.sum(irf_values[:h_fevd+1, i, s]**2)
+        total_var = np.sum(cum_sq_resp)
+        if total_var > 0:
+            fevd_values[i, h_fevd, :] = cum_sq_resp / total_var
+        else:
+            fevd_values[i, h_fevd, :] = 0.25
 
 fevd_summary = []
 horisons = [0, 3, 7, 9]
@@ -313,13 +338,13 @@ plt.savefig("graficos_fevd.png", dpi=300)
 plt.close()
 
 # 7. Historical Decomposition
-residuals = svar_results.resid.values
+residuals = svar_results.resid
 B_inv = np.linalg.inv(B_est)
 struct_shocks = np.zeros((len(residuals), 4))
 for t in range(len(residuals)):
     struct_shocks[t] = np.dot(B_inv, residuals[t])
 
-df_shocks = pd.DataFrame(struct_shocks, columns=['shock_PBI', 'shock_INF', 'shock_TASA', 'shock_TC'], index=dates[p:])
+df_shocks = pd.DataFrame(struct_shocks, columns=['shock_PBI', 'shock_INF', 'shock_TASA', 'shock_TC'], index=dates[p+1:])
 df_shocks.to_csv("shocks_estructurales.csv")
 
 N_resid = len(residuals)
@@ -336,7 +361,7 @@ for j in range(4):
     contrib[j] = y_proj[2:]
 
 y_base = np.zeros(N_resid)
-actual_data = data_var.values[p-p:]
+actual_data = data_var.values[p:]
 
 # Let's plot Historical Decomposition for PBI growth and Inflation
 fig, axes = plt.subplots(2, 1, figsize=(12, 10))
@@ -350,7 +375,7 @@ for idx, var_idx in enumerate([0, 1]):
         sum_contrib += contrib[j, :, var_idx]
     baseline_var = actual_data[:, var_idx] - sum_contrib
     
-    x_dates = dates[p:]
+    x_dates = dates[p+1:]
     bottom_pos = np.zeros(N_resid)
     bottom_neg = np.zeros(N_resid)
     
@@ -396,12 +421,12 @@ with open("test_normality.txt", "w") as f:
 
 diag_summary = f"""Pruebas de Diagnóstico del Modelo VAR(2):
 1. Prueba de Autocorrelación Residual (Portmanteau / Whiteness test, nlags=4):
-   - Estadístico: {whiteness.statistic:.4f}
+   - Estadístico: {whiteness.stat:.4f}
    - p-valor: {whiteness.pvalue:.4f}
    - Conclusión: {'No hay autocorrelación serial a un nivel de significancia del 5%.' if whiteness.pvalue > 0.05 else 'Se rechaza la hipótesis nula de no autocorrelación.'}
 
 2. Prueba de Normalidad de Residuos (Jarque-Bera):
-   - Estadístico: {normality.statistic:.4f}
+   - Estadístico: {normality.stat:.4f}
    - p-valor: {normality.pvalue:.4f}
    - Conclusión: {'Los residuos siguen una distribución normal a un nivel de significancia del 5%.' if normality.pvalue > 0.05 else 'Se rechaza la hipótesis nula de normalidad.'}
 """

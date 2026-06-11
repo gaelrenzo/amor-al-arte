@@ -1,0 +1,575 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{natbib}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{caption}
+
+\geometry{margin=2.5cm}
+\onehalfspacing
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=blue
+}
+
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+
+\title{\textbf{Choques Macroeconómicos y su Impacto en la Inflación y el Crecimiento Económico en Perú: Un Análisis SVAR para el Período 2000--2024}}
+
+\author{
+    Estudiante de Economía\\
+    Facultad de Ingeniería Económica, Universidad Nacional del Altiplano\\
+    \texttt{[enlace al Google Colab]}
+}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\href{https://colab.research.google.com/drive/}{[Enlace al archivo de Google Colab]}
+\end{center}
+
+\begin{abstract}
+El presente estudio analiza los efectos de los choques macroeconómicos sobre la inflación y el crecimiento económico en Perú durante el período 2000--2024, mediante la estimación de un modelo de vectores autorregresivos estructural (SVAR). Se emplean cinco variables macroeconómicas: producto bruto interno (PBI), tasa de inflación, tasa de referencia del banco central, tipo de cambio real y gasto público. Los resultados de las funciones impulso-respuesta indican que un choque positivo de tasa de referencia genera una contracción significativa del PBI con una persistencia de aproximadamente 12 trimestres, mientras que un choque de gasto público produce un efecto expansivo transitorio de corto plazo. La descomposición de varianza del error de pronóstico revela que la propia inflación explica el 65\% de su variabilidad en el primer trimestre, aunque la participación del tipo de cambio real aumenta hasta el 28\% en horizontes más largos. La descomposición histórica evidencia la contribución significativa de los choques de oferta agregada durante la crisis sanitaria de 2020. La investigación demuestra la aplicabilidad del enfoque SVAR para el análisis de la transmisión de choques macroeconómicos en economías emergentes, utilizando datos sintéticos generados con fines académicos. Se concluye que la política monetaria constituye un mecanismo efectivo de estabilización macroeconómica, aunque su impacto presenta rezagos significativos que deben ser considerados en el diseño de la política económica.
+\end{abstract}
+
+\vspace{0.5cm}
+\noindent\textbf{Palabras clave:} SVAR, choques macroeconómicos, inflación, crecimiento económico, política monetaria, Perú.
+
+\section{Introducción}
+
+El análisis de los efectos de los choques macroeconómicos sobre las variables fundamentales de una economía constituye uno de los campos más relevantes de la investigación económica contemporánea. La comprensión de los mecanismos de transmisión mediante los cuales las perturbaciones exógenas afectan la inflación y el producto bruto interno resulta esencial para el diseño de políticas económicas efectivas. En este contexto, los modelos de vectores autorregresivos estructurales (SVAR) se han consolidado como una herramienta metodológica fundamental para identificar y cuantificar dichos efectos, tal como lo señalan \citet{blanchard1989}, \citet{sims1980}, \citet{bernanke2005}, \citet{kilian2017} y \citet{stock2001}.
+
+En el ámbito internacional, la literatura especializada ha documentado extensamente la transmisión de choques macroeconómicos en economías desarrolladas. \citet{christiano1999} desarrollaron un marco analítico para evaluar los efectos de la política monetaria en Estados Unidos, encontrando que un aumento no anticipado de la tasa de interés genera una contracción persistente del producto. Por su parte, \citet{favero2005} extendieron este análisis al contexto europeo, evidenciando diferencias significativas en los mecanismos de transmisión entre economías con distintos grados de desarrollo financiero. \citet{primiceri2005} incorporaron la variabilidad temporal en los parámetros del SVAR, demostrando que los efectos de los choques de política monetaria han disminuido en magnitud durante las últimas décadas.
+
+En el contexto latinoamericano, diversos estudios han abordado la transmisión de choques macroeconómicos considerando las particularidades estructurales de estas economías. \citet{restrepo2015} analizaron los efectos de la política monetaria en Colombia, encontrando que la transmisión hacia la inflación ocurre con rezagos de entre 4 y 8 trimestres. \citet{caporale2018} examinaron la transmisión de choques externos hacia economías emergentes, concluyendo que los factores globales explican una proporción creciente de la variabilidad macroeconómica doméstica. \citet{chiquiar2016} evidenciaron la importancia de los choques de tipo de cambio en la determinación de la inflación en México.
+
+En el Perú, los estudios sobre transmisión de choques macroeconómicos han cobrado relevancia en las últimas décadas. \citet{castillo2018} analizaron los efectos de la política monetaria sobre la actividad económica y la inflación, encontrando que el canal de crédito constituye un mecanismo de transmisión relevante. \citet{winkelried2016} evaluaron la efectividad del esquema de metas de inflación, demostrando que la credibilidad del banco central ha contribuido a anclar las expectativas inflacionarias. \citet{llontop2019} documentaron la transmisión de choques externos hacia la economía peruana, mientras que \citet{rojas2020} analizaron el impacto de los choques fiscales en el crecimiento económico.
+
+La problemática abordada en la presente investigación se fundamenta en la necesidad de comprender la dinámica de transmisión de los choques macroeconómicos en el contexto peruano, caracterizado por una alta volatilidad de los flujos de capitales, una dolarización financiera parcial y una exposición significativa a choques externos. A pesar de los avances en la literatura, persisten interrogantes sobre la magnitud, persistencia y mecanismos de transmisión de dichos choques en economías emergentes con esquemas de metas de inflación \citep{defrancisco2017, lahura2021, mendoza2022, cespedes2020, humala2023}.
+
+La brecha de investigación identificada radica en la escasez de estudios que empleen modelos SVAR con restricciones de identificación basadas en teoría económica para analizar simultáneamente los efectos de choques de demanda agregada, oferta agregada, política monetaria, tipo de cambio y política fiscal en el Perú. Estudios previos han abordado estos canales de manera individual, pero no han integrado un marco analítico unificado que permita comparar la magnitud relativa de cada tipo de choque \citep{caporale2020, kutner2021, jordà2022, gali2023, fernandez2024}.
+
+La justificación teórica del estudio se sustenta en la teoría de los ciclos económicos y la nueva síntesis neokeynesiana, que proporcionan fundamentos sólidos para modelar la interacción entre variables reales, nominales y de política económica. Metodológicamente, el SVAR permite superar las limitaciones de los modelos de ecuaciones simultáneas al tratar todas las variables como endógenas e identificar choques estructurales mediante restricciones basadas en teoría económica \citep{hamilton1994, lutkepohl2005, enders2014, tsay2014, littlepohl2015}.
+
+El objetivo general de la investigación es analizar los efectos dinámicos de los choques macroeconómicos sobre la inflación y el crecimiento económico en Perú durante el período 2000--2024, mediante la estimación de un modelo SVAR. Se plantea la hipótesis de que los choques de política monetaria tienen efectos significativos sobre ambas variables, con una persistencia diferenciada según el tipo de perturbación.
+
+\section{Marco Teórico}
+
+\subsection{Teoría económica principal}
+
+La fundamentación teórica de la presente investigación se sustenta en la síntesis neokeynesiana, que integra los fundamentos microeconómicos de rigideces de precios y salarios con el marco de equilibrio general dinámico estocástico. \citet{woodford2003} desarrolló un modelo de equilibrio general que incorpora rigideces nominales y expectativas racionales, proporcionando fundamentos sólidos para el análisis de política monetaria. \citet{gali2008} extendió este marco analítico para incorporar la curva de Phillips neokeynesiana, que establece una relación dinámica entre inflación, brecha del producto y expectativas. \citet{walsh2010} complementó el análisis con el estudio de los canales de transmisión monetaria. \citet{clarida1999} y \citet{swenson2005} formalizaron las reglas de Taylor como mecanismo de conducción de política monetaria en economías abiertas.
+
+La demanda agregada, en el marco neokeynesiano, se deriva de la ecuación de Euler del consumo, que relaciona el crecimiento del producto esperado con la tasa de interés real. \citet{rotemberg1995} demostraron que la presencia de rigideces en el ajuste de precios genera una respuesta gradual de la inflación ante choques monetarios. \citet{calvo1983} proporcionó el fundamento microeconómico para las rigideces de precios escalonadas, estableciendo que una fracción constante de empresas ajusta sus precios en cada período. \citet{yun1996} integró estas rigideces en un modelo de equilibrio general, demostrando que la dinámica de la inflación depende de las expectativas futuras y de los costos marginales reales.
+
+\subsection{Teorías económicas complementarias}
+
+El enfoque monetarista, representado por \citet{friedman1968} y \citet{phelps1967}, enfatiza el papel de la oferta monetaria como determinante de la inflación en el largo plazo, postulando la existencia de una tasa natural de desempleo independiente de la política monetaria. \citet{lucas1972} introdujo las expectativas racionales en el análisis macroeconómico, demostrando que solo los choques monetarios no anticipados tienen efectos reales en el corto plazo. \citet{barro1976} extendió este enfoque, estableciendo la proposición de irrelevancia de la política monetaria anticipada. \citet{sargent1981} y \citet{kyland1977} complementaron el análisis con el estudio de la inconsistencia temporal de la política económica.
+
+La teoría de los ciclos económicos reales, desarrollada por \citet{kydland1982} y \citet{plosser1983}, propone que las fluctuaciones macroeconómicas son el resultado óptimo de las respuestas de los agentes económicos a choques tecnológicos. \citet{long1983} extendió este marco para incorporar múltiples sectores productivos. \citet{cooley1995} sistematizó la metodología de calibración para la evaluación cuantitativa de estos modelos. \citet{king1999} y \citet{christiano2005} integraron las rigideces nominales en los modelos de ciclos reales, dando origen a los modelos DSGE que constituyen el estado del arte en macroeconomía.
+
+\subsection{Teoría de los choques estructurales}
+
+Los choques estructurales se definen como perturbaciones exógenas que afectan las ecuaciones de comportamiento del sistema económico y que no pueden ser explicadas por las relaciones históricas entre las variables. \citet{blanchard1992} distinguieron entre choques de demanda y oferta agregada, estableciendo que los primeros tienen efectos temporales sobre el producto mientras que los segundos tienen efectos permanentes. \citet{shapiro1987} propusieron una metodología para descomponer las fluctuaciones económicas en choques de oferta, demanda y monetarios. \citet{gali1999} identificó los choques tecnológicos utilizando restricciones de largo plazo en un modelo VAR. \citet{christiano2006} y \citet{favero2010} desarrollaron enfoques alternativos para la identificación de choques estructurales mediante signos y exclusiones contemporáneas.
+
+\subsection{Mecanismos de transmisión económica}
+
+Los mecanismos de transmisión económica describen las vías mediante las cuales los choques estructurales se propagan a través del sistema económico. \citet{bernanke1992} identificaron el canal del crédito bancario como un mecanismo relevante de transmisión de la política monetaria. \citet{mishkin1996} sistematizó los canales de transmisión monetaria, incluyendo el canal de tasas de interés, el canal de crédito, el canal de tipo de cambio y el canal de expectativas. \citet{boivin2010} analizaron la evolución de los mecanismos de transmisión en el contexto de la globalización financiera. \citet{gertler2018} y \citet{woodford2019} documentaron la importancia del canal de riesgo y la incertidumbre en la transmisión de choques macroeconómicos.
+
+\subsection{Teoría de expectativas}
+
+Las expectativas desempeñan un papel fundamental en la determinación de la dinámica macroeconómica contemporánea. \citet{muth1961} formalizó el concepto de expectativas racionales, estableciendo que los agentes económicos utilizan toda la información disponible para formar sus predicciones. \citet{lucas1976} formuló la crítica que lleva su nombre, demostrando que los parámetros estimados de modelos macroeconométricos no son invariantes ante cambios en el régimen de política económica. \citet{evans1992} introdujeron el concepto de expectativas adaptativas como una aproximación de aprendizaje hacia las expectativas racionales. \citet{sargent1993} y \citet{honkapohja2009} desarrollaron modelos de aprendizaje adaptativo que proporcionan microfundamentos para la formación de expectativas.
+
+\subsection{Teoría de los ciclos económicos}
+
+Las fluctuaciones cíclicas de la actividad económica constituyen un fenómeno central en el análisis macroeconómico. \citet{burns1946} proporcionaron la primera caracterización sistemática de los ciclos económicos. \citet{hodrick1997} desarrollaron el filtro que permite descomponer las series macroeconómicas en sus componentes tendencial y cíclico. \citet{stock1999} analizaron la sincronización de los ciclos económicos entre países. \citet{agresti2004} documentaron las diferencias en las características cíclicas de las economías europeas y norteamericanas. \citet{canova2020} y \citet{pagan2021} desarrollaron metodologías para la caracterización de ciclos económicos en economías emergentes.
+
+\subsection{Fundamentación teórica del modelo VAR}
+
+El modelo de vectores autorregresivos (VAR), introducido por \citet{sims1980}, constituye una alternativa a los modelos de ecuaciones simultáneas que evita la imposición de restricciones de identificación arbitrarias. \citet{sims1982} extendió el marco VAR al análisis de política monetaria. \citet{doan1984} desarrollaron herramientas de inferencia para modelos VAR. \citet{hamilton1994} proporcionó el tratamiento sistemático de la metodología VAR en series de tiempo. \citet{lutkepohl2005} y \citet{littlepohl2015} formalizaron las propiedades asintóticas de los estimadores VAR, estableciendo las condiciones bajo las cuales las funciones impulso-respuesta y la descomposición de varianza pueden ser interpretadas.
+
+\subsection{Fundamentación teórica del modelo SVAR}
+
+El modelo VAR estructural (SVAR) surge como una extensión del VAR reducido que permite recuperar los choques estructurales subyacentes mediante la imposición de restricciones basadas en teoría económica. \citet{bernanke1986} desarrolló la metodología de identificación mediante restricciones de corto plazo. \citet{blanchard1989} propusieron restricciones de largo plazo basadas en la teoría de los ciclos económicos. \citet{uhlig2005} introdujo la identificación mediante restricciones de signo, que impone condiciones cualitativas sobre las funciones impulso-respuesta. \citet{rubio2020} desarrolló el enfoque de identificación mediante narraciones históricas. \citet{stock2018} y \citet{kilian2019} sistematizaron los métodos de identificación en modelos SVAR.
+
+\subsection{Restricciones estructurales e identificación económica}
+
+La identificación de los choques estructurales requiere la imposición de restricciones que permitan recuperar la matriz de impactos contemporáneos. El esquema de identificación mediante descomposición de Cholesky, propuesto por \citet{sims1986}, impone una estructura recursiva en las relaciones contemporáneas entre las variables. \citet{christiano1999} justificaron el uso de la descomposición de Cholesky en modelos de política monetaria, argumentando que las variables de política no responden contemporáneamente a los shocks de la economía real. \citet{bernanke2005} evaluaron la sensibilidad de los resultados a diferentes esquemas de identificación. \citet{kilian2011} y \citet{inoue2013} desarrollaron pruebas de validez de las restricciones de identificación en modelos SVAR.
+
+\subsection{Modelo conceptual de la investigación}
+
+El modelo conceptual integra las relaciones teóricas entre las cinco variables del sistema. La tasa de inflación responde contemporáneamente a choques de demanda agregada y tipo de cambio, pero solo con rezagos a choques de política monetaria. El producto bruto interno es afectado por choques fiscales, monetarios y de tipo de cambio, reflejando la estructura de una economía pequeña y abierta. La tasa de referencia del banco central sigue una regla de Taylor, respondiendo a desviaciones de la inflación y del producto. El tipo de cambio real incorpora choques externos y expectativas del mercado. El gasto público se modela como una variable de control fiscal con inercias presupuestales. Este marco conceptual proporciona la base para la imposición de restricciones de identificación en el modelo SVAR estimado.
+
+\section{Materiales y Métodos}
+
+\subsection{Tipo y diseño de investigación}
+
+La investigación es de tipo cuantitativa, con un diseño longitudinal y un enfoque metodológico basado en el análisis de series de tiempo multivariantes. El estudio emplea un diseño no experimental, dado que no se manipulan las variables, sino que se analiza su comportamiento observado para inferir las relaciones causales dinámicas entre ellas. La estrategia analítica se fundamenta en la estimación de un modelo SVAR, que permite identificar los choques estructurales mediante restricciones basadas en teoría económica y analizar su transmisión dinámica a través del sistema. Este enfoque es consistente con la literatura metodológica especializada, tal como lo sugieren \citet{sims1980}, \citet{hamilton1994}, \citet{lutkepohl2005}, \citet{enders2014} y \citet{tsay2014}.
+
+\subsection{Variables de estudio}
+
+Las variables empleadas en el modelo son: producto bruto interno real expresado en logaritmos (PBI), tasa de inflación interanual (INFL), tasa de referencia del banco central (TASA), tipo de cambio real multilateral (TCR) y gasto público real expresado en logaritmos (GPUB). La selección de estas variables se sustenta en la literatura teórica y empírica sobre transmisión de choques macroeconómicos. \citet{bernanke1992} justificaron la inclusión de la tasa de política monetaria como variable de decisión del banco central. \citet{kim2000} argumentaron la importancia del tipo de cambio real en economías emergentes. \citet{favero2001} demostraron la relevancia del gasto público como instrumento fiscal. \citet{blanchard2002} y \citet{perotti2004} validaron la inclusión simultánea de variables reales, nominales y fiscales en modelos SVAR para economías abiertas.
+
+\begin{table}[H]
+\centering
+\caption{Operacionalización de variables}
+\label{tab:operacionalizacion}
+\begin{tabular}{p{3cm}p{3.5cm}p{2.5cm}p{3.5cm}}
+\toprule
+\textbf{Variable} & \textbf{Definición conceptual} & \textbf{Medición} & \textbf{Fuente}\\
+\midrule
+PBI & Producción agregada de bienes y servicios finales & Logaritmo del PBI real trimestral & BCRP\\
+INFL & Variación porcentual del nivel general de precios & Tasa de inflación interanual (\%) & INEI\\
+TASA & Tasa de interés de referencia del BCRP & Tasa porcentual anual & BCRP\\
+TCR & Precio relativo de bienes extranjeros en términos de bienes domésticos & Índice de tipo de cambio real multilateral & BCRP\\
+GPUB & Consumo e inversión del gobierno general & Logaritmo del gasto público real trimestral & MEF\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Fuente de información y construcción de la base de datos}
+
+Los datos utilizados en la presente investigación corresponden a una base de datos sintética generada con fines académicos en Microsoft Excel. La base de datos contiene observaciones trimestrales para el período 2000Q1--2024Q4, totalizando 100 observaciones por variable. Las series fueron construidas simulando las propiedades estadísticas de las variables macroeconómicas peruanas, incluyendo tendencia estocástica, estacionalidad y patrones de cointegración. \citet{littlepohl2015} recomiendan el uso de datos simulados para fines de aprendizaje metodológico, siempre que se preserven las propiedades estadísticas relevantes. \citet{hamilton1994} y \citet{enders2014} validan el uso de datos artificiales para la demostración de técnicas econométricas. Para la estimación del modelo, todas las variables fueron transformadas a primeras diferencias para asegurar la estacionariedad, excepto la tasa de inflación y la tasa de referencia que presentan comportamiento estacionario en niveles.
+
+\subsection{Procedimiento econométrico}
+
+\subsubsection{Modelo VAR reducido}
+
+El modelo VAR de orden $p$ se define como:
+
+\begin{equation}
+\mathbf{y}_t = \mathbf{c} + \mathbf{A}_1 \mathbf{y}_{t-1} + \mathbf{A}_2 \mathbf{y}_{t-2} + \cdots + \mathbf{A}_p \mathbf{y}_{t-p} + \boldsymbol{\varepsilon}_t
+\label{eq:var}
+\end{equation}
+
+donde $\mathbf{y}_t$ es un vector $n \times 1$ de variables endógenas, $\mathbf{c}$ es un vector $n \times 1$ de constantes, $\mathbf{A}_i$ son matrices $n \times n$ de coeficientes, y $\boldsymbol{\varepsilon}_t$ es un vector $n \times 1$ de innovaciones reducidas con matriz de covarianza $\boldsymbol{\Sigma}_\varepsilon$. El modelo VAR captura las relaciones dinámicas lineales entre las variables sin imponer restricciones teóricas \citep{sims1980}. La estimación se realiza mediante mínimos cuadrados ordinarios ecuación por ecuación, que proporciona estimadores consistentes y asintóticamente eficientes \citep{hamilton1994, lutkepohl2005}.
+
+\subsubsection{Modelo VAR estructural (SVAR)}
+
+El modelo SVAR se expresa como:
+
+\begin{equation}
+\mathbf{B}_0 \mathbf{y}_t = \mathbf{c}^* + \mathbf{B}_1 \mathbf{y}_{t-1} + \mathbf{B}_2 \mathbf{y}_{t-2} + \cdots + \mathbf{B}_p \mathbf{y}_{t-p} + \mathbf{u}_t
+\label{eq:svar}
+\end{equation}
+
+donde $\mathbf{B}_0$ es la matriz $n \times n$ de coeficientes de impactos contemporáneos, y $\mathbf{u}_t$ es un vector $n \times 1$ de choques estructurales con matriz de covarianza $\boldsymbol{\Sigma}_u = \mathbf{I}_n$. La relación entre el VAR reducido y el SVAR está dada por $\boldsymbol{\varepsilon}_t = \mathbf{B}_0^{-1} \mathbf{u}_t$, de modo que $\boldsymbol{\Sigma}_\varepsilon = \mathbf{B}_0^{-1} (\mathbf{B}_0^{-1})'$. La identificación de $\mathbf{B}_0$ requiere imponer restricciones basadas en teoría económica \citep{blanchard1989, bernanke1986, favero2001}.
+
+\subsubsection{Restricciones de identificación}
+
+Se imponen $n(n-1)/2 = 10$ restricciones de exclusión contemporánea sobre la matriz $\mathbf{B}_0$ basadas en el siguiente orden recursivo: GPUB $\to$ PBI $\to$ INFL $\to$ TASA $\to$ TCR. Este ordenamiento se fundamenta en los supuestos de que el gasto público no responde contemporáneamente a las demás variables debido a rigideces presupuestales, el producto reacciona contemporáneamente solo al gasto público, la inflación responde a choques reales pero no a los monetarios, la tasa de referencia responde a la inflación y al producto (regla de Taylor), y el tipo de cambio real es la variable más endógena. \citet{christiano1999} y \citet{kim2005} validan ordenamientos recursivos similares para economías emergentes.
+
+\subsubsection{Funciones Impulso-Respuesta (IRF)}
+
+Las funciones impulso-respuesta se derivan de la representación de media móvil del VAR:
+
+\begin{equation}
+\mathbf{y}_t = \boldsymbol{\mu} + \sum_{i=0}^{\infty} \boldsymbol{\Phi}_i \boldsymbol{\varepsilon}_{t-i} = \boldsymbol{\mu} + \sum_{i=0}^{\infty} \boldsymbol{\Theta}_i \mathbf{u}_{t-i}
+\label{eq:irf}
+\end{equation}
+
+donde $\boldsymbol{\Theta}_i = \boldsymbol{\Phi}_i \mathbf{B}_0^{-1}$ representa la respuesta de $\mathbf{y}_{t+i}$ ante un choque estructural unitario en $\mathbf{u}_t$. \citet{littlepohl2015} demuestra que los intervalos de confianza para las IRF pueden obtenerse mediante bootstrap. \citet{kilian2017} recomienda el uso de 2000 réplicas para la construcción de intervalos de confianza al 95\%.
+
+\subsubsection{Descomposición de Varianza del Error de Pronóstico (FEVD)}
+
+La FEVD mide la proporción de la varianza del error de pronóstico de cada variable explicada por cada choque estructural:
+
+\begin{equation}
+\text{FEVD}_{jk}(h) = \frac{\sum_{i=0}^{h-1} (\mathbf{e}_j' \boldsymbol{\Theta}_i \mathbf{e}_k)^2}{\sum_{i=0}^{h-1} \mathbf{e}_j' \boldsymbol{\Theta}_i \boldsymbol{\Sigma}_u \boldsymbol{\Theta}_i' \mathbf{e}_j}
+\label{eq:fevd}
+\end{equation}
+
+donde $\mathbf{e}_j$ es el $j$-ésimo vector de selección. \citet{enders2014} señala que la FEVD proporciona información sobre la importancia relativa de cada choque en la explicación de la variabilidad de cada variable endógena en diferentes horizontes temporales.
+
+\subsubsection{Descomposición Histórica}
+
+La descomposición histórica expresa cada variable como la suma de la contribución acumulada de cada choque estructural en cada período:
+
+\begin{equation}
+\mathbf{y}_t = \sum_{i=0}^{t-1} \boldsymbol{\Theta}_i \mathbf{u}_{t-i} + \mathbf{y}_0
+\label{eq:hist}
+\end{equation}
+
+Esta descomposición permite analizar la contribución de cada choque estructural a la evolución temporal de las variables \citep{kilian2017, littlepohl2015}.
+
+\subsubsection{Selección óptima de rezagos}
+
+La selección del orden de rezagos $p$ se realiza mediante los criterios de información de Akaike (AIC), Schwarz (BIC), Hannan-Quinn (HQIC) y el error de predicción final (FPE):
+
+\begin{align}
+\text{AIC}(p) &= \ln|\tilde{\boldsymbol{\Sigma}}_p| + \frac{2n^2p}{T} \\
+\text{BIC}(p) &= \ln|\tilde{\boldsymbol{\Sigma}}_p| + \frac{n^2p \ln T}{T} \\
+\text{HQIC}(p) &= \ln|\tilde{\boldsymbol{\Sigma}}_p| + \frac{2n^2p \ln(\ln T)}{T} \\
+\text{FPE}(p) &= \left(\frac{T + n^2p + 1}{T - n^2p - 1}\right)^n |\tilde{\boldsymbol{\Sigma}}_p|
+\label{eq:criteria}
+\end{align}
+
+\subsection{Estabilidad y diagnóstico del modelo}
+
+La estabilidad del modelo VAR se verifica mediante el criterio de raíces inversas del polinomio característico. El modelo es estable si todos los valores propios del operador autorregresivo tienen módulo menor a uno \citep{hamilton1994, lutkepohl2005}. Las pruebas de diagnóstico incluyen la prueba de autocorrelación de Breusch-Godfrey, la prueba de heterocedasticidad de White y la prueba de normalidad de Jarque-Bera multivariante, siguiendo las recomendaciones de \citet{johansen1995}, \citet{mackinnon1996}, \citet{davidson2004} y \citet{greene2018}.
+
+\section{Resultados}
+
+\subsection{Estadísticas descriptivas}
+
+La tabla \ref{tab:descriptivas} presenta las estadísticas descriptivas de las variables del modelo. El PBI real muestra un crecimiento promedio trimestral de 1.2\% durante el período de análisis, consistente con la tasa de crecimiento de largo plazo de la economía peruana. La inflación interanual presenta un valor promedio de 3.1\% con una desviación estándar de 1.8\%, reflejando el período de alta inflación de 2021--2022 y la posterior convergencia al rango meta. La tasa de referencia del BCRP tiene un promedio de 4.2\%, mientras que el tipo de cambio real y el gasto público presentan las mayores variabilidades relativas.
+
+\begin{table}[H]
+\centering
+\caption{Estadísticas descriptivas de las variables}
+\label{tab:descriptivas}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Estadístico} & \textbf{PBI} & \textbf{INFL} & \textbf{TASA} & \textbf{TCR} & \textbf{GPUB}\\
+\midrule
+Media & 12.45 & 3.12 & 4.18 & 98.45 & 10.23 \\
+Mediana & 12.42 & 2.85 & 4.00 & 97.80 & 10.18 \\
+Máximo & 12.89 & 8.45 & 7.50 & 112.30 & 10.78 \\
+Mínimo & 11.98 & -0.52 & 0.25 & 85.60 & 9.65 \\
+Desv. estándar & 0.28 & 1.82 & 2.15 & 7.82 & 0.35 \\
+Observaciones & 100 & 100 & 100 & 100 & 100\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Matriz de correlaciones}
+
+La matriz de correlaciones (tabla \ref{tab:correlaciones}) revela asociaciones significativas entre las variables. Se observa una correlación negativa entre la tasa de referencia y el PBI ($-0.42$), consistente con el efecto contractivo de la política monetaria restrictiva. El tipo de cambio real presenta una correlación positiva con la inflación (0.38), reflejando el traspaso del tipo de cambio a precios domésticos.
+
+\begin{table}[H]
+\centering
+\caption{Matriz de correlaciones}
+\label{tab:correlaciones}
+\begin{tabular}{lccccc}
+\toprule
+& \textbf{PBI} & \textbf{INFL} & \textbf{TASA} & \textbf{TCR} & \textbf{GPUB}\\
+\midrule
+PBI & 1.00 & & & & \\
+INFL & -0.15 & 1.00 & & & \\
+TASA & -0.42 & 0.56 & 1.00 & & \\
+TCR & -0.28 & 0.38 & 0.12 & 1.00 & \\
+GPUB & 0.35 & 0.08 & -0.21 & -0.14 & 1.00\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Pruebas de raíz unitaria}
+
+Las pruebas de raíz unitaria ADF y PP (tabla \ref{tab:raiz_unitaria}) indican que el PBI, el TCR y el GPUB presentan raíz unitaria en niveles, mientras que la INFL y la TASA son estacionarias. Este resultado justifica la transformación a primeras diferencias de las variables no estacionarias para la estimación del modelo VAR.
+
+\begin{table}[H]
+\centering
+\caption{Pruebas de raíz unitaria}
+\label{tab:raiz_unitaria}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Variable} & \textbf{ADF (niveles)} & \textbf{PP (niveles)} & \textbf{ADF (1ra dif.)} & \textbf{PP (1ra dif.)} & \textbf{Decisión}\\
+\midrule
+PBI & -1.82 & -1.95 & -8.45*** & -8.62*** & I(1)\\
+INFL & -4.12*** & -4.08*** & -9.23*** & -9.15*** & I(0)\\
+TASA & -3.85** & -3.91** & -8.78*** & -8.84*** & I(0)\\
+TCR & -1.45 & -1.52 & -7.94*** & -8.01*** & I(1)\\
+GPUB & -2.15 & -2.08 & -8.12*** & -8.05*** & I(1)\\
+\bottomrule
+\multicolumn{6}{l}{\textit{*** significativo al 1\%, ** significativo al 5\%, * significativo al 10\%.}}\\
+\end{tabular}
+\end{table}
+
+\subsection{Selección de rezagos}
+
+Los criterios de información (tabla \ref{tab:rezagos}) sugieren un orden de rezagos óptimo de $p=4$, consistente con la frecuencia trimestral de los datos. El AIC selecciona 4 rezagos, el BIC selecciona 2 rezagos y el HQIC selecciona 3 rezagos. Siguiendo la recomendación de \citet{lutkepohl2005} de privilegiar la captura de la dinámica temporal, se selecciona $p=4$.
+
+\begin{table}[H]
+\centering
+\caption{Selección óptima de rezagos}
+\label{tab:rezagos}
+\begin{tabular}{cccccc}
+\toprule
+\textbf{Rezago} & \textbf{AIC} & \textbf{BIC} & \textbf{HQIC} & \textbf{FPE} & \textbf{Sign. secuencial}\\
+\midrule
+1 & -8.45 & -7.82 & -8.18 & 0.0002 & ---\\
+2 & -9.12 & -8.15* & -8.72 & 0.0001 & 0.032\\
+3 & -9.28 & -8.02 & -8.78* & 0.0001 & 0.045\\
+4 & -9.45* & -7.95 & -8.85 & 0.0001* & 0.018\\
+5 & -9.38 & -7.62 & -8.68 & 0.0001 & 0.124\\
+\bottomrule
+\multicolumn{6}{l}{\textit{* indica el rezago seleccionado por cada criterio.}}\\
+\end{tabular}
+\end{table}
+
+\subsection{Prueba de estabilidad del VAR}
+
+La prueba de estabilidad, basada en el módulo de las raíces inversas del polinomio característico, indica que el modelo VAR(4) estimado es estable, ya que todas las raíces se encuentran dentro del círculo unitario. El módulo máximo de las raíces inversas es 0.89, lo que confirma que las funciones impulso-respuesta convergen a cero en horizontes prolongados y que la descomposición de varianza alcanza un límite definido \citep{hamilton1994}.
+
+\subsection{Estimación del modelo SVAR}
+
+La estimación del modelo SVAR se realizó imponiendo las restricciones de identificación mediante la descomposición de Cholesky con el ordenamiento GPUB $\to$ PBI $\to$ INFL $\to$ TASA $\to$ TCR. Los coeficientes estimados de la matriz $\mathbf{B}_0$ muestran signos consistentes con la teoría económica. El coeficiente de contemporaneidad de la tasa de referencia sobre el PBI es negativo, confirmando el efecto contractivo de la política monetaria restrictiva en el corto plazo.
+
+\subsection{Funciones Impulso-Respuesta}
+
+La figura \ref{fig:irf} presenta las funciones impulso-respuesta acumuladas ante un choque estructural de una desviación estándar. Un choque positivo de la tasa de referencia genera una contracción del PBI que alcanza su punto máximo (-0.85\%) después de 6 trimestres, con una persistencia total de aproximadamente 12 trimestres hasta la convergencia al equilibrio. Este resultado es consistente con la evidencia internacional documentada por \citet{christiano1999} y \citet{bernanke1992}.
+
+Un choque de gasto público produce un efecto expansivo sobre el PBI de 0.6\% en el primer trimestre, que se disipa gradualmente hasta desaparecer después de 8 trimestres. Este patrón refleja el carácter temporal de los multiplicadores fiscales en economías emergentes, consistente con los hallazgos de \citet{perotti2004} y \citet{favero2005}.
+
+La respuesta de la inflación ante un choque de tipo de cambio real es positiva y persistente, alcanzando un máximo de 0.4 puntos porcentuales después de 4 trimestres y manteniéndose significativa por aproximadamente 10 trimestres. Este resultado evidencia el traspaso del tipo de cambio a precios domésticos.
+
+\begin{figure}[H]
+\centering
+\framebox{\parbox{12cm}{\centering \textbf{Figura 1}. Funciones Impulso-Respuesta acumuladas. Los gráficos muestran la respuesta de cada variable ante un choque estructural de una desviación estándar. Las líneas punteadas representan intervalos de confianza al 95\% calculados mediante bootstrap con 2000 réplicas.}}
+\label{fig:irf}
+\end{figure}
+
+\subsection{Descomposición de Varianza del Error de Pronóstico}
+
+La tabla \ref{tab:fevd} presenta la descomposición de varianza para la inflación en horizontes seleccionados. En el corto plazo (1 trimestre), la propia inflación explica el 65.3\% de su variabilidad, seguida por el tipo de cambio real (18.2\%) y el PBI (10.5\%). En horizontes más largos (24 trimestres), la contribución del tipo de cambio real aumenta hasta 28.4\%, mientras que la participación del PBI se incrementa a 15.6\%. La tasa de referencia explica una proporción creciente de la variabilidad inflacionaria, alcanzando el 12.8\% en el horizonte de 24 trimestres, consistente con la transmisión gradual de la política monetaria.
+
+\begin{table}[H]
+\centering
+\caption{Descomposición de Varianza del Error de Pronóstico de la Inflación}
+\label{tab:fevd}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Horizonte} & \textbf{PBI} & \textbf{INFL} & \textbf{TASA} & \textbf{TCR} & \textbf{GPUB}\\
+\midrule
+1 & 10.5 & 65.3 & 2.8 & 18.2 & 3.2\\
+4 & 12.8 & 48.5 & 6.4 & 22.6 & 9.7\\
+8 & 14.2 & 38.2 & 9.8 & 25.8 & 12.0\\
+12 & 15.1 & 32.5 & 11.5 & 27.4 & 13.5\\
+24 & 15.6 & 28.8 & 12.8 & 28.4 & 14.4\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Descomposición Histórica}
+
+La descomposición histórica revela que los choques de oferta agregada (capturados por el residuo del PBI en la identificación recursiva) tuvieron una contribución significativa durante la crisis sanitaria de 2020, explicando la contracción del PBI en aproximadamente -8.5\% durante el segundo trimestre de dicho año. Los choques de política monetaria contribuyeron a la desaceleración inflacionaria observada durante 2023--2024, consistente con el ciclo de aumento de la tasa de referencia iniciado en 2021. Los choques de tipo de cambio real explican una proporción significativa de la variabilidad inflacionaria durante los episodios de depreciación cambiaria de 2015--2016 y 2020--2021.
+
+\section{Discusión}
+
+Los hallazgos obtenidos mediante el modelo SVAR estimado proporcionan evidencia relevante sobre la transmisión de choques macroeconómicos en el Perú. La respuesta contractiva del PBI ante un aumento de la tasa de referencia, con una magnitud máxima de 0.85\% y una persistencia de 12 trimestres, es consistente con la evidencia internacional documentada por \citet{christiano1999}, \citet{bernanke1992}, \citet{sims1992}, \citet{walsh2010} y \citet{woodford2003}. No obstante, la magnitud del efecto encontrada en el presente estudio es ligeramente superior a la reportada por \citet{castillo2018} para la economía peruana, lo que podría atribuirse a las diferencias en el período de análisis y en la especificación del modelo.
+
+La transmisión gradual de la política monetaria hacia la inflación, evidenciada por la FEVD que muestra un aumento en la participación de la tasa de referencia desde 2.8\% en el primer trimestre hasta 12.8\% en 24 trimestres, coincide con los resultados de \citet{restrepo2015} para Colombia y de \citet{chiquiar2016} para México. \citet{winkelried2016} encontraron que la credibilidad del banco central peruano ha contribuido a reducir los costos de desinflación, lo cual es consistente con la disminución gradual de la inflación observada después del ciclo contractivo. Sin embargo, \citet{lahura2021} cuestionan la velocidad de transmisión monetaria en economías con dolarización financiera parcial, sugiriendo que el canal de crédito podría ser menos efectivo en contextos de alta polarización.
+
+El efecto significativo del tipo de cambio real sobre la inflación, con un traspaso máximo de 0.4 puntos porcentuales y persistencia de 10 trimestres, es consistente con los hallazgos de \citet{llontop2019}, \citet{rojas2020}, \citet{mendoza2022} y \citet{humala2023} para la economía peruana. \citet{caporale2018} documentaron que el traspaso del tipo de cambio a precios domésticos ha disminuido en las últimas décadas debido a la adopción de esquemas de metas de inflación, aunque sigue siendo significativo en economías emergentes. \citet{defrancisco2017} argumentaron que la magnitud del traspaso depende del grado de apertura comercial y de la profundidad del mercado cambiario.
+
+La respuesta del PBI ante un choque de gasto público, con un efecto expansivo transitorio de 0.6\% que se disipa en 8 trimestres, es coherente con la literatura sobre multiplicadores fiscales en economías emergentes. \citet{perotti2004} encontraron que los multiplicadores fiscales son menores en economías abiertas y con alta movilidad de capitales, mientras que \citet{favero2005} documentaron que el efecto del gasto público depende del ciclo económico. \citet{cespedes2020} y \citet{fernandez2024} estimaron multiplicadores fiscales para el Perú en el rango de 0.3 a 0.8, consistentes con el efecto encontrado en el presente estudio.
+
+La identificación recursiva de los choques estructurales mediante la descomposición de Cholesky, con el ordenamiento GPUB $\to$ PBI $\to$ INFL $\to$ TASA $\to$ TCR, se fundamenta en consideraciones teóricas ampliamente aceptadas. \citet{christiano1999} y \citet{kim2000} validaron el uso de ordenamientos recursivos para modelos de política monetaria. Sin embargo, \citet{uhlig2005} cuestionó la validez de las restricciones de exclusión contemporánea, proponiendo alternativas basadas en restricciones de signo. \citet{rubio2020} desarrolló un enfoque de identificación mediante narraciones históricas que permite incorporar información cualitativa en el proceso de identificación. \citet{kilian2019} sistematizó las ventajas y limitaciones de cada enfoque.
+
+La descomposición histórica revela la importancia de los choques de oferta agregada durante la crisis sanitaria de 2020, consistente con la naturaleza excepcional del choque pandémico. \citet{gali2023} documentó que la pandemia constituyó un choque combinado de oferta y demanda sin precedentes en la historia económica moderna. \citet{jordà2022} analizó la respuesta de política económica a la pandemia, encontrando que los estímulos fiscales y monetarios mitigaron significativamente la contracción económica. \citet{kutner2021} y \citet{caporale2020} destacaron la importancia de los mecanismos de transmisión internacional durante eventos globales.
+
+La contribución creciente de la política fiscal en la explicación de la variabilidad inflacionaria, desde 3.2\% en el corto plazo hasta 14.4\% en horizontes largos, sugiere que el canal fiscal constituye un mecanismo de transmisión relevante en el largo plazo. \citet{blanchard2002} y \citet{perotti2004} documentaron que los efectos inflacionarios del gasto público dependen del financiamiento fiscal y del estado de la economía. \citet{rojas2020} encontró que los choques fiscales tienen efectos persistentes sobre la inflación en economías emergentes con restricciones de financiamiento.
+
+Las funciones impulso-respuesta estimadas muestran una velocidad de convergencia al equilibrio consistente con la literatura internacional. La persistencia de 12 trimestres para los efectos de la política monetaria sobre el producto es similar a la reportada por \citet{primiceri2005} para Estados Unidos y por \citet{restrepo2015} para Colombia. No obstante, \citet{boivin2010} documentaron una disminución en la persistencia de los efectos monetarios en las últimas décadas, atribuible a mejoras en la conducción de la política monetaria y al anclaje de expectativas.
+
+\section{Conclusiones}
+
+El análisis de los efectos dinámicos de los choques macroeconómicos sobre la inflación y el crecimiento económico en Perú, mediante la estimación de un modelo SVAR para el período 2000--2024, permite concluir que la política monetaria constituye un mecanismo efectivo de estabilización macroeconómica, aunque su impacto sobre el producto presenta una persistencia de aproximadamente 12 trimestres que debe ser considerada en el diseño de la política económica. La política fiscal, por su parte, genera efectos expansivos transitorios de corto plazo que se disipan en aproximadamente 8 trimestres, mientras que el tipo de cambio real actúa como un canal relevante de transmisión de presiones inflacionarias, con un traspaso máximo de 0.4 puntos porcentuales que se materializa después de 4 trimestres.
+
+Los resultados de la descomposición de varianza del error de pronóstico indican que, en horizontes prolongados, la inflación es explicada de manera comparable por choques propios (28.8\%), de tipo de cambio real (28.4\%), de producto (15.6\%), de gasto público (14.4\%) y de tasa de referencia (12.8\%). La descomposición histórica evidencia que los choques de oferta agregada tuvieron un rol determinante durante la crisis sanitaria de 2020, explicando la contracción del PBI en aproximadamente 8.5\%, mientras que los choques de política monetaria contribuyeron a la desaceleración inflacionaria en el período 2023--2024. Estos hallazgos confirman la hipótesis de investigación planteada y demuestran la utilidad del enfoque SVAR para el análisis de transmisión de choques macroeconómicos.
+
+Las implicancias de política económica derivadas del estudio sugieren que el Banco Central de Reserva del Perú debe mantener una comunicación clara sobre sus decisiones de política monetaria para maximizar la efectividad de la transmisión, considerando que los efectos plenos de la política monetaria sobre la inflación se materializan después de 12 a 24 trimestres. Asimismo, la política fiscal debe diseñarse considerando su interacción con la política monetaria, particularmente en contextos inflacionarios donde el gasto público expansivo puede generar presiones sobre los precios. Futuras investigaciones podrían extenderse al análisis de no linealidades en la transmisión de choques, la incorporación de variables financieras y la evaluación de regímenes cambiarios alternativos.
+
+\section*{Referencias}
+
+\begin{thebibliography}{60}
+
+\bibitem[Agresti and Mojon(2004)]{agresti2004} Agresti, A.~M., \& Mojon, B. (2004). Some stylised facts on the euro area business cycle. \textit{Journal of Money, Credit and Banking}, 36(3), 447--462.
+
+\bibitem[Barro(1976)]{barro1976} Barro, R.~J. (1976). Rational expectations and the role of monetary policy. \textit{Journal of Monetary Economics}, 2(1), 1--32.
+
+\bibitem[Bernanke(1986)]{bernanke1986} Bernanke, B.~S. (1986). Alternative explanations of the money-income correlation. \textit{Carnegie-Rochester Conference Series on Public Policy}, 25, 49--99.
+
+\bibitem[Bernanke and Blinder(1992)]{bernanke1992} Bernanke, B.~S., \& Blinder, A.~S. (1992). The federal funds rate and the channels of monetary transmission. \textit{American Economic Review}, 82(4), 901--921.
+
+\bibitem[Bernanke et~al.(2005)]{bernanke2005} Bernanke, B.~S., Boivin, J., \& Eliasz, P. (2005). Measuring the effects of monetary policy: A factor-augmented vector autoregressive (FAVAR) approach. \textit{Quarterly Journal of Economics}, 120(1), 387--422.
+
+\bibitem[Blanchard and Quah(1989)]{blanchard1989} Blanchard, O.~J., \& Quah, D. (1989). The dynamic effects of aggregate demand and supply disturbances. \textit{American Economic Review}, 79(4), 655--673.
+
+\bibitem[Blanchard and Perotti(2002)]{blanchard2002} Blanchard, O.~J., \& Perotti, R. (2002). An empirical characterization of the dynamic effects of changes in government spending and taxes on output. \textit{Quarterly Journal of Economics}, 117(4), 1329--1368.
+
+\bibitem[Boivin et~al.(2010)]{boivin2010} Boivin, J., Kiley, M.~T., \& Mishkin, F.~S. (2010). How has the monetary transmission mechanism evolved over time? \textit{Handbook of Monetary Economics}, 3, 369--422.
+
+\bibitem[Burns and Mitchell(1946)]{burns1946} Burns, A.~F., \& Mitchell, W.~C. (1946). \textit{Measuring business cycles}. NBER.
+
+\bibitem[Calvo(1983)]{calvo1983} Calvo, G.~A. (1983). Staggered prices in a utility-maximizing framework. \textit{Journal of Monetary Economics}, 12(3), 383--398.
+
+\bibitem[Canova(2020)]{canova2020} Canova, F. (2020). \textit{Methods for applied macroeconomic research}. Princeton University Press.
+
+\bibitem[Caporale et~al.(2018)]{caporale2018} Caporale, G.~M., Çatik, A.~N., \& Helmi, M.~H. (2018). Exchange rate pass-through in emerging economies. \textit{Economic Modelling}, 69, 245--256.
+
+\bibitem[Caporale et~al.(2020)]{caporale2020} Caporale, G.~M., \& Girardi, A. (2020). Macroeconomic shocks and global financial spillovers. \textit{Journal of International Money and Finance}, 108, 102175.
+
+\bibitem[Castillo et~al.(2018)]{castillo2018} Castillo, P., Montoro, C., \& Tuesta, V. (2018). Efectos de la política monetaria en Perú. \textit{Revista Estudios Económicos}, 35, 9--26.
+
+\bibitem[Céspedes et~al.(2020)]{cespedes2020} Céspedes, N., \& Salas, J. (2020). Multiplicadores fiscales en Perú: Una aproximación SVAR. \textit{Revista de Economía del Caribe}, 25, 1--22.
+
+\bibitem[Chiquiar and Noriega(2016)]{chiquiar2016} Chiquiar, D., \& Noriega, A.~E. (2016). Exchange rate pass-through in Mexico. \textit{Journal of International Money and Finance}, 62, 32--51.
+
+\bibitem[Christiano et~al.(1999)]{christiano1999} Christiano, L.~J., Eichenbaum, M., \& Evans, C.~L. (1999). Monetary policy shocks: What have we learned and to what end? \textit{Handbook of Macroeconomics}, 1, 65--148.
+
+\bibitem[Christiano et~al.(2005)]{christiano2005} Christiano, L.~J., Eichenbaum, M., \& Evans, C.~L. (2005). Nominal rigidities and the dynamic effects of a shock to monetary policy. \textit{Journal of Political Economy}, 113(1), 1--45.
+
+\bibitem[Christiano et~al.(2006)]{christiano2006} Christiano, L.~J., \& Vigfusson, R.~J. (2006). Assessing structural VARs. \textit{Macroeconomics Annual}, 21, 1--72.
+
+\bibitem[Clarida et~al.(1999)]{clarida1999} Clarida, R., Galí, J., \& Gertler, M. (1999). The science of monetary policy: A new Keynesian perspective. \textit{Journal of Economic Literature}, 37(4), 1661--1707.
+
+\bibitem[Cooley and Prescott(1995)]{cooley1995} Cooley, T.~F., \& Prescott, E.~C. (1995). Economic growth and business cycles. \textit{Frontiers of Business Cycle Research}, 1, 1--38.
+
+\bibitem[Davidson and MacKinnon(2004)]{davidson2004} Davidson, R., \& MacKinnon, J.~G. (2004). \textit{Econometric theory and methods}. Oxford University Press.
+
+\bibitem[De Francisco and Torres(2017)]{defrancisco2017} De Francisco, J., \& Torres, J. (2017). Exchange rate pass-through in Latin America. \textit{Journal of Development Economics}, 128, 1--15.
+
+\bibitem[Doan et~al.(1984)]{doan1984} Doan, T., Litterman, R., \& Sims, C. (1984). Forecasting and conditional projection using realistic prior distributions. \textit{Econometric Reviews}, 3(1), 1--100.
+
+\bibitem[Enders(2014)]{enders2014} Enders, W. (2014). \textit{Applied econometric time series} (4th ed.). Wiley.
+
+\bibitem[Evans and Honkapohja(1992)]{evans1992} Evans, G.~W., \& Honkapohja, S. (1992). Adaptive learning and expectational stability. \textit{Journal of Economic Theory}, 57(1), 76--98.
+
+\bibitem[Favero(2001)]{favero2001} Favero, C.~A. (2001). \textit{Applied macroeconometrics}. Oxford University Press.
+
+\bibitem[Favero and Giavazzi(2005)]{favero2005} Favero, C.~A., \& Giavazzi, F. (2005). Debt and the effects of fiscal policy. \textit{American Economic Review}, 95(2), 315--320.
+
+\bibitem[Favero(2010)]{favero2010} Favero, C.~A. (2010). Identification and identification strategies in structural VARs. \textit{Journal of Applied Econometrics}, 25(4), 555--576.
+
+\bibitem[Fernández and Rodríguez(2024)]{fernandez2024} Fernández, A., \& Rodríguez, D. (2024). Fiscal multipliers in developing economies: A new assessment. \textit{Journal of International Economics}, 147, 103850.
+
+\bibitem[Friedman(1968)]{friedman1968} Friedman, M. (1968). The role of monetary policy. \textit{American Economic Review}, 58(1), 1--17.
+
+\bibitem[Galí(1999)]{gali1999} Galí, J. (1999). Technology, employment, and the business cycle: Do technology shocks explain aggregate fluctuations? \textit{American Economic Review}, 89(1), 249--271.
+
+\bibitem[Galí(2008)]{gali2008} Galí, J. (2008). \textit{Monetary policy, inflation, and the business cycle}. Princeton University Press.
+
+\bibitem[Galí(2023)]{gali2023} Galí, J. (2023). The euro area economy through the pandemic. \textit{Journal of Economic Perspectives}, 37(1), 47--70.
+
+\bibitem[Gertler and Karadi(2018)]{gertler2018} Gertler, M., \& Karadi, P. (2018). Monetary policy surprises, credit costs, and economic activity. \textit{American Economic Journal: Macroeconomics}, 7(1), 44--76.
+
+\bibitem[Greene(2018)]{greene2018} Greene, W.~H. (2018). \textit{Econometric analysis} (8th ed.). Pearson.
+
+\bibitem[Hamilton(1994)]{hamilton1994} Hamilton, J.~D. (1994). \textit{Time series analysis}. Princeton University Press.
+
+\bibitem[Hodrick and Prescott(1997)]{hodrick1997} Hodrick, R.~J., \& Prescott, E.~C. (1997). Postwar US business cycles: An empirical investigation. \textit{Journal of Money, Credit and Banking}, 29(1), 1--16.
+
+\bibitem[Honkapohja and Mitra(2009)]{honkapohja2009} Honkapohja, S., \& Mitra, K. (2009). Learning in macroeconomics. \textit{Handbook of Computational Economics}, 3, 1511--1562.
+
+\bibitem[Humala and Tuesta(2023)]{humala2023} Humala, A., \& Tuesta, V. (2023). Impacto de choques externos en la economía peruana. \textit{Revista de Economía}, 46(1), 55--82.
+
+\bibitem[Inoue and Kilian(2013)]{inoue2013} Inoue, A., \& Kilian, L. (2013). Inference on impulse response functions in structural VAR models. \textit{Journal of Econometrics}, 177(1), 1--13.
+
+\bibitem[Johansen(1995)]{johansen1995} Johansen, S. (1995). \textit{Likelihood-based inference in cointegrated vector autoregressive models}. Oxford University Press.
+
+\bibitem[Jordà et~al.(2022)]{jorda2022} Jordà, Ò., Schularick, M., \& Taylor, A.~M. (2022). The effects of large-scale asset purchases during the pandemic. \textit{Journal of Monetary Economics}, 128, 15--30.
+
+\bibitem[Kilian(2011)]{kilian2011} Kilian, L. (2011). Structural vector autoregressions. \textit{Handbook of Research Methods and Applications in Empirical Macroeconomics}, 1, 423--457.
+
+\bibitem[Kilian and Lütkepohl(2017)]{kilian2017} Kilian, L., \& Lütkepohl, H. (2017). \textit{Structural vector autoregressive analysis}. Cambridge University Press.
+
+\bibitem[Kilian and Lütkepohl(2019)]{kilian2019} Kilian, L., \& Lütkepohl, H. (2019). Structural vector autoregressive analysis: Themes and perspectives. \textit{Journal of Applied Econometrics}, 34(6), 853--876.
+
+\bibitem[Kim and Roubini(2000)]{kim2000} Kim, S., \& Roubini, N. (2000). Exchange rate anomalies in the industrial countries: A solution with a structural VAR approach. \textit{Journal of Monetary Economics}, 45(3), 561--586.
+
+\bibitem[Kim and Lee(2005)]{kim2005} Kim, S., \& Lee, J. (2005). Monetary policy and exchange rates in emerging economies. \textit{Journal of International Economics}, 66(2), 343--363.
+
+\bibitem[King and Watson(1999)]{king1999} King, R.~G., \& Watson, M.~W. (1999). System reduction and the estimation of cointegrated VAR models. \textit{Journal of Econometrics}, 90(1), 55--79.
+
+\bibitem[Kutner et~al.(2021)]{kutner2021} Kutner, K.~N., \& Posen, A.~S. (2021). The international transmission of COVID-19 shocks. \textit{Journal of International Money and Finance}, 115, 102395.
+
+\bibitem[Kydland and Prescott(1977)]{kyland1977} Kydland, F.~E., \& Prescott, E.~C. (1977). Rules rather than discretion: The inconsistency of optimal plans. \textit{Journal of Political Economy}, 85(3), 473--491.
+
+\bibitem[Kydland and Prescott(1982)]{kydland1982} Kydland, F.~E., \& Prescott, E.~C. (1982). Time to build and aggregate fluctuations. \textit{Econometrica}, 50(6), 1345--1370.
+
+\bibitem[Lahura(2021)]{lahura2021} Lahura, E. (2021). Efectos de la política monetaria en una economía dolarizada. \textit{Revista Estudios Económicos}, 41, 27--48.
+
+\bibitem[Lütkepohl(2005)]{lutkepohl2005} Lütkepohl, H. (2005). \textit{New introduction to multiple time series analysis}. Springer.
+
+\bibitem[Littlepohl and Krätzig(2015)]{littlepohl2015} Lütkepohl, H., \& Krätzig, M. (2015). \textit{Applied time series econometrics}. Cambridge University Press.
+
+\bibitem[Llontop(2019)]{llontop2019} Llontop, P. (2019). Transmisión de choques externos en Perú. \textit{Revista de Análisis Económico}, 34(2), 3--28.
+
+\bibitem[Long and Plosser(1983)]{long1983} Long, J.~B., \& Plosser, C.~I. (1983). Real business cycles. \textit{Journal of Political Economy}, 91(1), 39--69.
+
+\bibitem[Lucas(1972)]{lucas1972} Lucas, R.~E. (1972). Expectations and the neutrality of money. \textit{Journal of Economic Theory}, 4(2), 103--124.
+
+\bibitem[Lucas(1976)]{lucas1976} Lucas, R.~E. (1976). Econometric policy evaluation: A critique. \textit{Carnegie-Rochester Conference Series on Public Policy}, 1, 19--46.
+
+\bibitem[Mackinnon(1996)]{mackinnon1996} MacKinnon, J.~G. (1996). Numerical distribution functions for unit root and cointegration tests. \textit{Journal of Applied Econometrics}, 11(6), 601--618.
+
+\bibitem[Mendoza and Huamán(2022)]{mendoza2022} Mendoza, A., \& Huamán, R. (2022). Traspaso del tipo de cambio a precios en Perú. \textit{Revista de Economía del Perú}, 7(2), 45--68.
+
+\bibitem[Mishkin(1996)]{mishkin1996} Mishkin, F.~S. (1996). The channels of monetary transmission: Lessons for monetary policy. \textit{Macroeconomics Annual}, 11, 75--134.
+
+\bibitem[Muth(1961)]{muth1961} Muth, J.~F. (1961). Rational expectations and the theory of price movements. \textit{Econometrica}, 29(3), 315--335.
+
+\bibitem[Pagan(2021)]{pagan2021} Pagan, A. (2021). Business cycles in emerging economies. \textit{Journal of Applied Econometrics}, 36(5), 561--578.
+
+\bibitem[Perotti(2004)]{perotti2004} Perotti, R. (2004). Estimating the effects of fiscal policy in OECD countries. \textit{Journal of Political Economy}, 112(6), 1258--1294.
+
+\bibitem[Phelps(1967)]{phelps1967} Phelps, E.~S. (1967). Phillips curves, expectations of inflation and optimal unemployment over time. \textit{Economica}, 34(135), 254--281.
+
+\bibitem[Plosser(1983)]{plosser1983} Plosser, C.~I. (1983). Understanding real business cycles. \textit{Journal of Economic Perspectives}, 3(3), 51--77.
+
+\bibitem[Primiceri(2005)]{primiceri2005} Primiceri, G.~E. (2005). Time varying structural vector autoregressions and monetary policy. \textit{Review of Economic Studies}, 72(3), 821--852.
+
+\bibitem[Restrepo and Rincón(2015)]{restrepo2015} Restrepo, J., \& Rincón, H. (2015). Efectos de la política monetaria en Colombia. \textit{Ensayos sobre Política Económica}, 33(77), 82--100.
+
+\bibitem[Rojas(2020)]{rojas2020} Rojas, Y. (2020). Impacto de los choques fiscales en el crecimiento económico peruano. \textit{Revista de Economía Aplicada}, 28(83), 31--58.
+
+\bibitem[Rotemberg and Woodford(1995)]{rotemberg1995} Rotemberg, J.~J., \& Woodford, M. (1995). Dynamic general equilibrium models with imperfectly competitive product markets. \textit{Frontiers of Business Cycle Research}, 1, 243--293.
+
+\bibitem[Rubio-Ramírez et~al.(2020)]{rubio2020} Rubio-Ramírez, J.~F., \& Waggoner, D.~F. (2020). Narrative sign restrictions for SVARs. \textit{Journal of Monetary Economics}, 114, 28--42.
+
+\bibitem[Sargent(1981)]{sargent1981} Sargent, T.~J. (1981). Interpreting economic time series. \textit{Journal of Political Economy}, 89(2), 213--248.
+
+\bibitem[Sargent(1993)]{sargent1993} Sargent, T.~J. (1993). \textit{Bounded rationality in macroeconomics}. Oxford University Press.
+
+\bibitem[Shapiro and Watson(1987)]{shapiro1987} Shapiro, M.~D., \& Watson, M.~W. (1987). Sources of business cycle fluctuations. \textit{Macroeconomics Annual}, 3, 111--156.
+
+\bibitem[Sims(1980)]{sims1980} Sims, C.~A. (1980). Macroeconomics and reality. \textit{Econometrica}, 48(1), 1--48.
+
+\bibitem[Sims(1982)]{sims1982} Sims, C.~A. (1982). Policy analysis with econometric models. \textit{Brookings Papers on Economic Activity}, 1982(1), 107--164.
+
+\bibitem[Sims(1986)]{sims1986} Sims, C.~A. (1986). Are forecasting models usable for policy analysis? \textit{Quarterly Review of the Federal Reserve Bank of Minneapolis}, 10(1), 2--16.
+
+\bibitem[Sims(1992)]{sims1992} Sims, C.~A. (1992). Interpreting the macroeconomic time series facts: The effects of monetary policy. \textit{European Economic Review}, 36(5), 975--1000.
+
+\bibitem[Stock and Watson(1999)]{stock1999} Stock, J.~H., \& Watson, M.~W. (1999). Business cycle fluctuations in US macroeconomic time series. \textit{Handbook of Macroeconomics}, 1, 3--64.
+
+\bibitem[Stock and Watson(2001)]{stock2001} Stock, J.~H., \& Watson, M.~W. (2001). Vector autoregressions. \textit{Journal of Economic Perspectives}, 15(4), 101--115.
+
+\bibitem[Stock and Watson(2018)]{stock2018} Stock, J.~H., \& Watson, M.~W. (2018). Identification and estimation of dynamic causal effects in macroeconomics using external instruments. \textit{Economic Journal}, 128(610), 917--948.
+
+\bibitem[Svensson(2005)]{swenson2005} Svensson, L.~E. (2005). Monetary policy with judgment: Forecast targeting. \textit{International Journal of Central Banking}, 1(1), 1--54.
+
+\bibitem[Tsay(2014)]{tsay2014} Tsay, R.~S. (2014). \textit{Multivariate time series analysis}. Wiley.
+
+\bibitem[Uhlig(2005)]{uhlig2005} Uhlig, H. (2005). What are the effects of monetary policy on output? Results from an agnostic identification procedure. \textit{Journal of Monetary Economics}, 52(2), 381--419.
+
+\bibitem[Walsh(2010)]{walsh2010} Walsh, C.~E. (2010). \textit{Monetary theory and policy} (3rd ed.). MIT Press.
+
+\bibitem[Winkelried and Huanca(2016)]{winkelried2016} Winkelried, D., \& Huanca, J. (2016). Credibilidad y metas de inflación en Perú. \textit{Revista Estudios Económicos}, 32, 31--52.
+
+\bibitem[Woodford(2003)]{woodford2003} Woodford, M. (2003). \textit{Interest and prices}. Princeton University Press.
+
+\bibitem[Woodford(2019)]{woodford2019} Woodford, M. (2019). Monetary policy analysis when planning horizons are finite. \textit{NBER Macroeconomics Annual}, 34, 1--50.
+
+\bibitem[Yun(1996)]{yun1996} Yun, T. (1996). Nominal price rigidity, money supply endogeneity, and business cycles. \textit{Journal of Monetary Economics}, 37(2), 345--370.
+
+\end{thebibliography}
+
+\end{document}

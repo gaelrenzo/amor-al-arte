@@ -1,0 +1,9 @@
+*.aux
+*.log
+*.out
+*.pyc
+__pycache__/
+generar_docx.py
+generar_excel.py
+generar_notebook.py
+generar_pptx.py

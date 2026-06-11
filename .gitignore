@@ -1,9 +1,19 @@
+# Build artifacts
 *.aux
 *.log
 *.out
-*.pyc
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+
+# Python
 __pycache__/
-generar_docx.py
-generar_excel.py
-generar_notebook.py
-generar_pptx.py
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db

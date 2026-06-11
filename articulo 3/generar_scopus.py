@@ -97,15 +97,15 @@ new_para('IMPACTO DE LOS CHOQUES MACROECONÓMICOS SOBRE LA ACTIVIDAD ECONÓMICA 
 new_para('', size=12, space_after=6)
 
 p = new_para('', size=12, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=3)
-add_run(p, 'Renzo Gael Mamani Quispe', bold=False, size=11, italic=False)
+add_run(p, '[Autor 1]', bold=False, size=11, italic=False)
 add_run(p, '¹*', size=10, subscript=True)
 
 p = new_para('', size=12, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=3)
-add_run(p, 'Alfredo Pelayo Calatayud Mendoza', bold=False, size=11)
+add_run(p, '[Autor 2]', bold=False, size=11)
 add_run(p, '²', size=10, subscript=True)
 
 p = new_para('', size=12, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=3)
-add_run(p, 'José Carlos Machicao Mamani', bold=False, size=11)
+add_run(p, '[Autor 3]', bold=False, size=11)
 add_run(p, '³', size=10, subscript=True)
 
 new_para('', size=8, space_after=6)
@@ -123,7 +123,7 @@ add_run(p, '³ ', size=10, italic=True)
 add_run(p, 'Jefe de Práctica, Universidad Nacional del Altiplano, Facultad de Ingeniería Económica, Puno, Perú', size=10, italic=True)
 
 new_para('*Autor de correspondencia: ', size=10, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=0)
-p = new_para('renzomamani@example.com', size=10, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, space_after=6)
+p = new_para('[email@example.com]', size=10, align=WD_ALIGN_PARAGRAPH.CENTER, italic=True, space_after=6)
 
 # Línea separadora
 p = new_para('', size=2, space_after=6)

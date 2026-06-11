@@ -17,7 +17,7 @@ def update_tex_file(file_path):
         
     # Replace author-block placeholder
     old_author_placeholder = r'\texttt{[enlace al Google Colab]}'
-    new_author_text = rf'\texttt{{{colab_link}}}'
+    new_author_text = rf'\url{{{colab_link}}}'
     content = content.replace(old_author_placeholder, new_author_text)
     
     # Replace under-title link placeholder

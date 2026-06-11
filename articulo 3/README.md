@@ -5,7 +5,7 @@
 **Curso:** Econometría III  
 **Universidad:** Universidad Nacional del Altiplano - Puno  
 **Facultad:** Facultad de Ingeniería Económica  
-**Docente:** Alfredo Pelayo Calatayud Mendoza
+**Docente:** [Nombre del docente]
 
 ---
 

@@ -1,0 +1,39 @@
+--- Page 1 ---
+UNIVERSIDAD NACIONAL DEL ALTIPLANO 
+FACULTAD DE INGENIERIA ECONOMICA 
+CURSO : ECONOMETRIA III 
+Profesor : Alfredo Pelayo Calatayud Mendoza 
+ 
+Pautas para el desarrollo de la Práctica 10 
+ 
+Estimados estudiantes: La Práctica Dirigida N.° 10 deberá desarrollarse de manera estrictamente individual 
+utilizando herramientas de Inteligencia Artificial (ChatGPT, Claude, Gemini, DeepSeek, Kimi u otras) 
+como apoyo para la generación de la base de dato s macroeconómica sintética y la estimación del modelo 
+VAR Estructural (SVAR) propuestos en los dos prompts proporcionados. Cada estudiante es responsable 
+de revisar, validar e interpretar adecuadamente los resultados obtenidos, demostrando comprensión de l os 
+procedimientos econométricos aplicados. 
+ 
+Como evidencia del trabajo realizado, deberán elaborar un archivo de Google Colab (.ipynb) que contenga 
+el código completo, tablas, gráficos e interpretaciones; asimismo, un informe en Word (.docx) con formato 
+de artículo científico estilo APA que incluya como mínimo: Título, Resumen, Introducción, Revisión de 
+Literatura o Marco Teórico, Metodología, Resultados, Discusión, Conclusiones y Referencias 
+Bibliográficas, además de tablas, figuras, resultados econométricos e interpretaciones económicas. Debajo 
+del título del artículo deberán colocar el enlace (link) de acceso a su archivo de Google Colab para facilitar 
+la revisión y replicación de los resultados. También deberán elaborar una presentación en PowerPoint 
+(.pptx) de aproximadamente 20 diapositivas y ge nerar la base de datos en Excel (.xlsx) utilizada en el 
+análisis. 
+ 
+Todos los archivos deberán almacenarse en una única carpeta de Google Drive denominada con los 
+apellidos y nombres completos del estudiante. Finalmente, deberán registrar en la siguiente hoja de cálculo 
+el enlace de acceso a su carpeta de Google Drive:  
+https://docs.google.com/spreadsheets/d/1ON8LlzOBDzQbmkP2UkpXb5QBvmeTrsXdaq_DxFZfd3U/edi
+t?usp=sharing.  
+ 
+Para la evaluación, deberán entregar a través de Google Drive tres archivos principales: el informe en Word, 
+la presentación en PowerPoint y la base de datos en Excel; el archivo de Google Colab será revisado 
+mediante el enlace incorporado al inicio del artículo. Se evaluará la calidad técnica del análisis, la correcta 
+aplicación de la metodología econométrica, la interpretación de los resultados y la presentación profesional 
+de los productos entregados. 
+ 
+ 
+Deben entregar hasta 11:00 del dia de hoy. 

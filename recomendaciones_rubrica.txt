@@ -1,0 +1,310 @@
+UNIVERSIDAD NACIONAL DEL ALTIPLANO
+FACULTAD DE INGENIERIA ECONOMICA
+CURSO	: ECONOMETRIA III
+Profesor	: Alfredo Pelayo Calatayud Mendoza
+
+SUGERENCIA Y RUBRICA
+
+Sugerencias para mejorar el artículo final
+El artículo científico final deberá presentar una extensión aproximada de entre 15 y 20 páginas, sin considerar las referencias bibliográficas ni los anexos. La redacción debe caracterizarse por su claridad, coherencia, precisión conceptual y rigor académico, manteniendo una estructura lógica que garantice la adecuada articulación entre la introducción, el marco teórico, la metodología, los resultados, la discusión y las conclusiones.
+Todo el documento deberá elaborarse utilizando fuente Times New Roman, tamaño 12 puntos, con interlineado simple (1.0), texto justificado y márgenes uniformes. Asimismo, se recomienda revisar cuidadosamente aspectos de ortografía, gramática, puntuación y estilo académico, con el propósito de asegurar una presentación profesional y acorde con los estándares de publicación científica.
+Las tablas deberán presentarse siguiendo estrictamente las normas APA (séptima edición), incorporando numeración consecutiva, títulos descriptivos y la correspondiente fuente de información cuando sea necesario. Además, los resultados incluidos en las tablas deberán ser explicados e interpretados dentro del texto, evitando presentar información estadística sin el debido análisis económico y metodológico.
+Los gráficos, figuras y diagramas deberán contar con alta resolución y excelente calidad visual, garantizando una adecuada legibilidad de todos sus elementos. Cada gráfico deberá incluir numeración consecutiva, título descriptivo, identificación clara de los ejes, unidades de medida y fuente correspondiente. Se recomienda evitar imágenes borrosas o capturas de pantalla de baja calidad que puedan afectar la presentación del trabajo.
+Finalmente, todas las ecuaciones, tablas, figuras y referencias bibliográficas deberán estar correctamente citadas y vinculadas al contenido del artículo. Las referencias deberán seguir estrictamente el formato APA (séptima edición), verificando la correspondencia entre las citas realizadas en el texto y la lista final de referencias. El documento debe reflejar un nivel de calidad equivalente al exigido por revistas científicas indexadas y demostrar un adecuado dominio tanto de la teoría económica como de la metodología econométrica empleada.
+La evaluación del artículo científico se realizará utilizando la siguiente rúbrica, la cual considera criterios relacionados con la estructura y redacción académica, fundamentación teórica, aplicación metodológica del modelo VAR estructural (SVAR), calidad de los resultados y discusión, así como la presentación de tablas, figuras y referencias bibliográficas. La calificación final reflejará el nivel de rigurosidad científica, coherencia metodológica y cumplimiento de los estándares académicos establecidos para la elaboración del artículo.
+
+
+Se recomienda mantener la estructura convencional de un artículo científico, respetando el siguiente orden: Título, Resumen, Palabras clave, Introducción, Marco Teórico, Materiales y Métodos, Resultados, Discusión, Conclusiones, Referencias Bibliográficas y Anexos (si corresponde).
+Asimismo, es importante precisar que los prompts mostrados más adelante tienen únicamente carácter referencial y han sido elaborados para facilitar el avance en la redacción del artículo. Por ello, dichos ejemplos inician directamente con la sección de Resultados; sin embargo, esto no modifica ni reemplaza la estructura formal que debe seguir la versión final del manuscrito.
+Prompts para Artículo Científico con Modelo VAR Estructural (SVAR)
+PROMPT 1. RESULTADOS
+Actúa como investigador experto en econometría aplicada y modelos VAR estructurales (SVAR).
+A partir del título de mi investigación, el objetivo del estudio y los resultados obtenidos mediante un modelo VAR estructural estimado con datos simulados (datos sintéticos) generados en Excel con fines académicos y de aprendizaje metodológico, redacta la sección RESULTADOS de un artículo científico. El objetivo no es validar relaciones empíricas reales, sino demostrar la correcta aplicación e interpretación de la metodología VAR estructural.
+Instrucciones:
+Redactar en estilo académico para revista indexada.
+No describir variables de manera aislada.
+Analizar la dinámica conjunta entre las variables.
+Relacionar permanentemente los resultados con el objetivo de investigación.
+Incorporar tablas y gráficos obtenidos en el análisis.
+Redactar en tiempo pasado.
+No utilizar viñetas dentro de la sección de resultados.
+Evitar interpretaciones superficiales.
+Mantener coherencia entre teoría económica y evidencia econométrica.
+Aunque los datos son sintéticos, redactar los resultados con el mismo rigor metodológico exigido en una publicación científica.
+No cuestionar la validez de los datos simulados ni mencionar limitaciones derivadas de su carácter sintético.
+Desarrollar obligatoriamente las siguientes subsecciones:
+Estadísticas descriptivas de las variables.
+Matriz de correlaciones.
+Pruebas de estacionariedad (ADF, PP o KPSS según corresponda).
+Selección óptima de rezagos mediante AIC, BIC, HQIC y FPE.
+Prueba de estabilidad del modelo VAR mediante raíces inversas del polinomio característico.
+Estimación del modelo VAR estructural (SVAR).
+Funciones Impulso–Respuesta (Impulse Response Functions).
+Descomposición de Varianza del Error de Pronóstico (Forecast Error Variance Decomposition).
+Descomposición Histórica de los choques estructurales.
+Para cada tabla:
+Explicar los resultados más relevantes.
+Relacionar los resultados con la teoría económica.
+Identificar patrones y relaciones dinámicas.
+Para cada gráfico:
+Explicar el shock estructural aplicado.
+Explicar la dirección de la respuesta.
+Explicar la magnitud de la respuesta.
+Explicar la persistencia temporal del efecto.
+Explicar la velocidad de convergencia al equilibrio.
+Analizar las implicancias económicas del comportamiento observado.
+Las funciones impulso–respuesta deben interpretarse económica y econométricamente.
+La descomposición de varianza debe identificar qué variable explica la mayor proporción de la variabilidad de cada variable endógena en distintos horizontes temporales.
+La descomposición histórica debe explicar cómo los choques estructurales contribuyeron a la evolución temporal de las variables del sistema.
+No presentar gráficos aislados ni comentarios descriptivos simples. Cada resultado debe ser interpretado de manera integral, relacionando teoría económica, dinámica temporal y evidencia econométrica.
+Redactar una sección de resultados con nivel de calidad suficiente para una revista académica indexada.
+
+PROMPT 2. DISCUSIÓN
+Actúa como investigador senior especializado en economía aplicada, macroeconomía, econometría y publicación científica en revistas indexadas.
+Redacta la sección DISCUSIÓN de un artículo científico a partir de los resultados obtenidos mediante un modelo VAR estructural (SVAR).
+Instrucciones:
+Elaborar exactamente 10 párrafos académicos.
+Cada párrafo debe contener al menos cinco autores diferentes, citados en formato académico.
+Priorizar literatura científica indexada en Scopus y Web of Science (WoS).
+Utilizar preferentemente artículos publicados durante los últimos diez años, complementados con autores clásicos cuando sea necesario.
+Evitar repetir innecesariamente los mismos autores entre párrafos.
+Redactar en estilo académico de alto nivel, propio de revistas científicas internacionales.
+No resumir ni repetir los resultados presentados en la sección anterior.
+Desarrollar una discusión crítica, analítica y argumentativa.
+Para cada resultado relevante:
+Comparar explícitamente los hallazgos obtenidos con investigaciones previas nacionales e internacionales.
+Identificar coincidencias, diferencias y contradicciones con la literatura.
+Explicar las posibles razones teóricas, metodológicas, institucionales o contextuales que justifican dichas diferencias.
+Relacionar permanentemente los hallazgos con las teorías económicas que sustentan el estudio.
+Evaluar si los resultados confirman o contradicen la hipótesis de investigación.
+Estructura sugerida:
+Párrafo 1: Discusión general de los hallazgos principales.
+Párrafo 2: Discusión de la primera relación relevante encontrada.
+Párrafo 3: Discusión de la segunda relación relevante encontrada.
+Párrafo 4: Discusión de los choques estructurales identificados.
+Párrafo 5: Discusión de las funciones impulso-respuesta.
+Párrafo 6: Discusión de la persistencia y dinámica temporal de los efectos.
+Párrafo 7: Discusión de la descomposición de varianza.
+Párrafo 8: Discusión de la descomposición histórica.
+Párrafo 9: Implicancias teóricas y metodológicas.
+Párrafo 10: Implicancias para políticas públicas, gestión pública o toma de decisiones.
+Cada párrafo debe concluir con una reflexión crítica que explique la relevancia de los hallazgos para la literatura científica y para el contexto analizado.
+El resultado final debe corresponder al nivel de exigencia de una revista científica indexada en Scopus o Web of Science.
+PROMPT 3. INTRODUCCIÓN
+Actúa como investigador senior especializado en economía y publicaciones científicas.
+
+Redacta la INTRODUCCIÓN de un artículo científico.
+
+- Elaborar exactamente 10 párrafos académicos.
+- Cada párrafo debe contener al menos cinco autores diferentes.
+- Utilizar literatura internacional reciente.
+
+Estructura:
+1. Contexto global.
+2. Contexto regional.
+3. Contexto nacional.
+4. Evidencia internacional.
+5. Evidencia latinoamericana.
+6. Evidencia nacional.
+7. Problema de investigación.
+8. Brecha de investigación.
+9. Justificación teórica y metodológica.
+10. Objetivo e hipótesis.
+PROMPT 4. MARCO TEÓRICO
+Actúa como economista especializado en teoría económica, macroeconomía, econometría avanzada y publicación científica en revistas indexadas Scopus y Web of Science.
+Redacta la sección MARCO TEÓRICO de un artículo científico a partir del título, objetivo, variables de estudio y modelo VAR estructural (SVAR) utilizado en la investigación.
+Instrucciones generales:
+Elaborar un marco teórico profundo, crítico y analítico.
+Evitar elaborar únicamente definiciones conceptuales.
+Desarrollar los fundamentos teóricos que explican las relaciones económicas entre las variables analizadas.
+Integrar teoría económica, evidencia empírica y fundamentos econométricos.
+Utilizar literatura científica internacional, latinoamericana y nacional.
+Priorizar artículos indexados en Scopus y Web of Science.
+Incorporar autores clásicos y contemporáneos.
+Redactar en estilo académico de alto nivel.
+Mantener coherencia entre la teoría económica, el modelo econométrico y el objetivo de investigación.
+Requisito obligatorio de citación:
+Cada párrafo debe contener como mínimo cinco autores diferentes citados en formato APA.
+No repetir sistemáticamente los mismos autores en párrafos consecutivos.
+Combinar autores clásicos y recientes.
+Cada afirmación teórica debe estar respaldada por evidencia científica.
+Utilizar preferentemente literatura publicada durante los últimos diez años, complementada con autores fundacionales cuando corresponda.
+Desarrollar obligatoriamente las siguientes subsecciones:
+Teoría económica principal que sustenta la investigación.
+Explicar los fundamentos teóricos centrales.
+Identificar los mecanismos económicos que explican la relación entre las variables.
+Analizar aportes, limitaciones y evolución de la teoría.
+Teorías económicas complementarias.
+Incorporar enfoques alternativos.
+Comparar diferentes escuelas de pensamiento económico.
+Explicar convergencias y divergencias teóricas.
+Teoría de los choques estructurales.
+Explicar la naturaleza de los choques económicos.
+Diferenciar choques de oferta, demanda, monetarios, fiscales, tecnológicos y externos.
+Relacionar los choques con las variables estudiadas.
+Mecanismos de transmisión económica.
+Explicar cómo los choques afectan a las demás variables del sistema.
+Analizar canales directos e indirectos.
+Desarrollar la lógica económica de propagación de los efectos.
+Teoría de expectativas.
+Desarrollar expectativas racionales, adaptativas y otras aproximaciones relevantes.
+Explicar su importancia en la dinámica temporal de las variables.
+Teoría de los ciclos económicos.
+Explicar fluctuaciones económicas.
+Relacionar los ciclos con la dinámica de las variables analizadas.
+Incorporar evidencia empírica relevante.
+Fundamentación teórica del modelo VAR.
+Explicar el origen, evolución y fundamentos del modelo VAR.
+Analizar sus ventajas y limitaciones.
+Sustentar su pertinencia para estudiar relaciones dinámicas.
+Fundamentación teórica del modelo VAR estructural (SVAR).
+Explicar las diferencias entre VAR reducido y SVAR.
+Justificar el uso de restricciones estructurales.
+Analizar la capacidad del modelo para identificar relaciones causales dinámicas.
+Restricciones estructurales e identificación económica.
+Explicar la lógica económica de las restricciones utilizadas.
+Fundamentar la identificación mediante teoría económica.
+Justificar el uso de la descomposición de Cholesky u otros esquemas de identificación.
+Modelo conceptual de la investigación.
+Explicar la relación teórica entre todas las variables.
+Justificar cada vínculo causal.
+Construir una narrativa teórica coherente que conduzca al modelo econométrico.
+El marco teórico debe concluir con un párrafo integrador que sintetice las teorías desarrolladas, justifique el uso del modelo SVAR y explique cómo los fundamentos teóricos sustentan las hipótesis y objetivos de investigación.
+El resultado final debe corresponder al nivel de exigencia de una revista científica internacional indexada en Scopus o Web of Science.
+PROMPT 5. MATERIALES Y MÉTODOS
+Actúa como econometrista senior especializado en econometría avanzada, macroeconomía aplicada, series de tiempo y modelos VAR estructurales (SVAR), con experiencia en publicaciones científicas indexadas en Scopus y Web of Science.
+Redacta la sección MATERIALES Y MÉTODOS de un artículo científico a partir del título, objetivo, variables de estudio, base de datos y modelo econométrico utilizado.
+Instrucciones generales:
+Redactar en lenguaje académico formal, técnico y científico.
+Mantener coherencia entre el problema de investigación, los objetivos, la teoría económica y la estrategia econométrica.
+Desarrollar una explicación rigurosa de cada procedimiento metodológico.
+No limitarse a describir comandos o software.
+Justificar teórica y metodológicamente cada decisión econométrica adoptada.
+Utilizar redacción propia de revistas científicas internacionales indexadas.
+Integrar permanentemente teoría económica y metodología econométrica.
+Requisito obligatorio de citación:
+Cada párrafo debe contener como mínimo cinco autores diferentes citados en formato APA.
+Incorporar autores clásicos y contemporáneos.
+Priorizar literatura indexada en Scopus y Web of Science.
+Utilizar referencias metodológicas especializadas en VAR, SVAR, identificación estructural y series de tiempo.
+Todas las afirmaciones metodológicas deben estar respaldadas por literatura científica.
+Desarrollar obligatoriamente las siguientes subsecciones:
+Tipo y diseño de investigación
+Explicar el enfoque metodológico.
+Justificar el diseño de investigación.
+Fundamentar la estrategia analítica utilizada.
+Variables de estudio
+Definir conceptualmente cada variable.
+Definir operacionalmente cada variable.
+Justificar su incorporación al modelo.
+Presentar una tabla de operacionalización.
+Fuente de información y construcción de la base de datos
+Explicar el origen de los datos.
+Describir el proceso de construcción de la base.
+Explicar transformaciones realizadas.
+Justificar el uso de datos sintéticos generados en Excel con fines de aprendizaje metodológico.
+Procedimiento econométrico
+Desarrollar rigurosamente y con ecuaciones matemáticas completas:
+4.1 Modelo VAR reducido
+Presentar la formulación matricial.
+Definir todos los parámetros.
+Explicar la interpretación económica.
+Justificar su utilización.
+4.2 Modelo VAR estructural (SVAR)
+Presentar la formulación estructural.
+Explicar la identificación de choques estructurales.
+Justificar el paso del VAR reducido al SVAR.
+4.3 Restricciones de identificación
+Explicar los fundamentos teóricos.
+Justificar cada restricción impuesta.
+Relacionar las restricciones con la teoría económica.
+4.4 Descomposición de Cholesky
+Presentar las ecuaciones correspondientes.
+Explicar el ordenamiento de variables.
+Justificar la secuencia causal utilizada.
+4.5 Funciones Impulso–Respuesta (Impulse Response Functions)
+Presentar la formulación matemática.
+Explicar la interpretación económica.
+Justificar su utilidad para analizar efectos dinámicos.
+4.6 Descomposición de Varianza del Error de Pronóstico
+Presentar ecuaciones completas.
+Explicar la contribución relativa de cada shock.
+Justificar su interpretación económica.
+4.7 Descomposición Histórica
+Desarrollar la formulación matemática.
+Explicar la contribución temporal de los choques estructurales.
+Relacionar la técnica con la identificación causal.
+4.8 Estabilidad del modelo
+Presentar el criterio de estabilidad.
+Explicar las raíces inversas del polinomio característico.
+Justificar la importancia de la estabilidad para la validez de los resultados.
+4.9 Selección óptima de rezagos
+Explicar AIC, BIC, HQIC y FPE.
+Presentar las ecuaciones correspondientes.
+Justificar el criterio finalmente adoptado.
+4.10 Diagnósticos econométricos
+Prueba de autocorrelación.
+Prueba de heterocedasticidad.
+Prueba de normalidad.
+Prueba de estabilidad.
+Otras pruebas relevantes.
+Para cada prueba:
+Presentar la ecuación o estadístico correspondiente.
+Explicar la hipótesis nula y alternativa.
+Justificar su importancia metodológica.
+Requisitos adicionales:
+Todas las ecuaciones deben presentarse formalmente y numeradas.
+Después de cada ecuación debe desarrollarse una explicación económica y metodológica.
+No presentar fórmulas sin interpretación.
+Relacionar permanentemente la metodología con el objetivo de investigación.
+Mantener un nivel de profundidad equivalente al exigido en artículos científicos publicados en revistas Scopus o Web of Science.
+La sección debe finalizar con un párrafo integrador que explique cómo la estrategia metodológica permite responder rigurosamente al objetivo de investigación y validar empíricamente las relaciones dinámicas entre las variables analizadas.
+
+PROMPT 6. CONCLUSIONES
+Redacta tres párrafos de conclusiones:
+
+1. Responder directamente al objetivo.
+2. Sintetizar los hallazgos principales.
+3. Explicar implicancias para política económica y futuras investigaciones.
+
+No repetir resultados numéricos.
+PROMPT 7. RESUMEN
+Redacta un resumen entre 250 y 300 palabras.
+
+Debe contener:
+- Objetivo.
+- Metodología.
+- Variables.
+- Modelo SVAR utilizado.
+- Principales resultados.
+- Conclusión principal.
+
+Incluir entre 4 y 6 palabras clave.
+PROMPT 8. REFERENCIAS
+Construye una lista de al menos 50 referencias académicas.
+
+Requisitos:
+- Formato APA 7.
+- Priorizar Scopus y WoS.
+- Incluir artículos metodológicos sobre VAR y SVAR.
+- Verificar consistencia entre citas y referencias.
+PROMPT 9. ANEXOS
+Elabora la sección de anexos.
+
+Incluir:
+- Código completo de Google Colab.
+- Tablas complementarias.
+- Pruebas de diagnóstico.
+- Resultados adicionales.
+- Gráficos suplementarios.
+- Matrices utilizadas para la identificación estructural.
+
+Todos los anexos deben estar numerados y referenciados en el texto principal.
+
+--- Table 1 ---
+Criterio de evaluación | Excelente (4 puntos) | Bueno (3 puntos) | Regular (2 puntos) | Deficiente (1 punto)
+Estructura y redacción científica | El artículo presenta una estructura completa, coherente y rigurosa; redacción académica impecable; cumple completamente las normas de formato establecidas. | Presenta estructura adecuada con mínimas observaciones de redacción o formato. | Existen problemas de organización, coherencia o redacción académica. | La estructura es deficiente y la redacción presenta numerosas inconsistencias.
+Fundamentación teórica y revisión de literatura | Marco teórico sólido, crítico y actualizado; incorpora amplia literatura científica; cada sección presenta adecuada sustentación teórica. | Presenta adecuada fundamentación teórica con algunas limitaciones en profundidad o actualización. | La revisión de literatura es superficial o poco articulada con el estudio. | Escasa fundamentación teórica y deficiente revisión bibliográfica.
+Aplicación metodológica del modelo SVAR | Explica rigurosamente el modelo VAR/SVAR, pruebas de diagnóstico, identificación estructural, IRF, FEVD, descomposición histórica y estabilidad. | La metodología es adecuada, aunque presenta algunas omisiones menores. | La metodología presenta vacíos importantes o explicaciones insuficientes. | La metodología es incorrecta, incompleta o no permite reproducir el análisis.
+Resultados, discusión e interpretación económica | Resultados correctamente analizados e interpretados; discusión crítica sustentada en literatura científica; excelente integración teoría-evidencia. | Los resultados e interpretaciones son adecuados con algunas limitaciones analíticas. | La discusión es principalmente descriptiva y poco conectada con la literatura. | Los resultados carecen de interpretación económica y discusión científica.
+Presentación de tablas, figuras y referencias | Tablas y figuras en formato APA, alta calidad visual, referencias completas y consistentes con las citas. | Presenta pequeños errores de formato o consistencia. | Existen varios problemas de presentación, citación o referencias. | Deficiencias importantes en formato, tablas, figuras y referencias bibliográficas.

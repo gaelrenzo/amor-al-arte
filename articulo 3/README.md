@@ -4,50 +4,63 @@
 
 **Curso:** Econometría III  
 **Universidad:** Universidad Nacional del Altiplano - Puno  
-**Facultad:** Facultad de Ingeniería Económica  
-**Docente:** [Nombre del docente]
+**Facultad:** Facultad de Ingeniería Económica
 
 ---
 
-## Contenido de la carpeta
+## Estructura de la carpeta
 
-| Archivo | Descripción |
+```
+articulo 3/
+├── 1_Articulo/                     ← Documentos del artículo
+│   ├── articulo_SVAR.docx          ←   Word (APA 7ª ed.)
+│   ├── articulo_SVAR_scopus.docx   ←   Word (formato Scopus)
+│   ├── articulo_SVAR_scopus.pdf    ←   PDF compilado
+│   └── latex/                      ←   Código fuente LaTeX
+│       ├── articulo_SVAR_scopus.tex
+│       └── referencias.bib
+│
+├── 2_Datos/                        ← Base de datos
+│   └── base_datos_sintetica.xlsx   ←   Datos macroeconómicos 2015-2024
+│
+├── 3_Codigo/                       ← Código y scripts
+│   ├── codigo_SVAR.py              ←   Código principal Python
+│   ├── codigo_SVAR.ipynb           ←   Notebook Google Colab
+│   ├── generar_base_datos.py       ←   Script para generar datos
+│   ├── generar_articulo.py         ←   Script para generar Word APA
+│   └── generar_scopus.py           ←   Script para generar Word Scopus
+│
+└── 4_Presentacion/                 ← Material de presentación
+    └── presentacion_SVAR.md        ←   Guía de diapositivas (25 slides)
+```
+
+## Contenido del artículo
+
+| Sección | Descripción |
 |---------|-------------|
-| `articulo_SVAR.docx` | Artículo científico completo en formato Word (APA 7ª ed.) |
-| `articulo_SVAR_scopus.docx` | Artículo científico formateado para revista indexada en Scopus |
-| `base_datos_sintetica.xlsx` | Base de datos macroeconómica sintética (2015-2024, 120 obs. mensuales, 6 variables) |
-| `codigo_SVAR.py` | Código Python completo para estimación del modelo SVAR |
-| `codigo_SVAR.ipynb` | Notebook de Google Colab para ejecución interactiva |
-| `presentacion_SVAR.md` | Guía de 25 diapositivas para presentación en PowerPoint |
-| `generar_base_datos.py` | Script para generar la base de datos sintética |
-| `generar_articulo.py` | Script para generar el artículo en Word |
+| Introducción | Contexto, problema, brecha, objetivos e hipótesis |
+| Marco Teórico | Keynesianismo, monetarismo, teoría de choques, SVAR |
+| Metodología | Diseño, variables, procedimiento econométrico, identificación Cholesky |
+| Resultados | Estadísticas, estacionariedad, IRF, FEVD, descomposición histórica |
+| Discusión | Comparación con literatura internacional y peruana |
+| Conclusiones | Hallazgos principales, implicancias de política económica |
+| Apéndices A-E | Matrices, tablas, diagnósticos, figuras, código |
 
 ## Variables del modelo
 
-- **PIB:** Producto Bruto Interno (índice base 100)
-- **INFLACION:** Tasa de inflación (%)
-- **TIPO_CAMBIO:** Tipo de cambio nominal (S/./USD)
-- **TASA_INTERES:** Tasa de interés de referencia (%)
-- **OFERTA_MONETARIA:** Logaritmo de la oferta monetaria (M2)
-- **GASTO_GOBIERNO:** Gasto público (índice)
-
-## Metodología
-
-1. Pruebas de raíz unitaria (ADF, PP, KPSS)
-2. Selección óptima de rezagos (AIC, BIC, HQIC, FPE)
-3. Estimación del modelo VAR reducido
-4. Verificación de estabilidad (raíces inversas del polinomio característico)
-5. Identificación SVAR mediante descomposición de Cholesky
-6. Funciones Impulso-Respuesta (IRF)
-7. Descomposición de Varianza del Error de Pronóstico (FEVD)
-8. Descomposición Histórica
+- **PIB** — Producto Bruto Interno (índice base 100)
+- **INFLACION** — Tasa de inflación (%)
+- **TIPO_CAMBIO** — Tipo de cambio nominal (S/./USD)
+- **TASA_INTERES** — Tasa de interés de referencia (%)
+- **OFERTA_MONETARIA** — Logaritmo de la oferta monetaria (M2)
+- **GASTO_GOBIERNO** — Gasto público (índice)
 
 ## Orden de identificación (Cholesky)
 
 1. Gasto Gobierno → 2. Oferta Monetaria → 3. PIB → 4. Inflación → 5. Tipo de Cambio → 6. Tasa de Interés
 
-## Requisitos
+## Requisitos para ejecutar el código
 
-```
+```bash
 pip install pandas numpy statsmodels openpyxl matplotlib seaborn python-docx
 ```

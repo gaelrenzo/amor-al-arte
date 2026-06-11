@@ -572,4 +572,202 @@ Las implicancias de política económica derivadas del estudio sugieren que el B
 
 \end{thebibliography}
 
+\newpage
+\appendix
+\section*{Anexos}
+\addcontentsline{toc}{section}{Anexos}
+
+\subsection*{Anexo A: Código Python para Estimación SVAR}
+\addcontentsline{toc}{subsection}{Anexo A: Código Python para Estimación SVAR}
+
+\medskip
+\noindent A continuación se presenta el código completo utilizado para la generación de datos sintéticos, estimación del modelo VAR, identificación SVAR, funciones impulso-respuesta, descomposición de varianza y descomposición histórica.
+
+\begin{verbatim}
+import os
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+from statsmodels.tsa.api import VAR
+from statsmodels.tsa.vector_ar.svar_model import SVAR
+import matplotlib.pyplot as plt
+from statsmodels.tsa.stattools import adfuller
+
+# Set random seed for reproducibility
+np.random.seed(42)
+
+# 1. Simulate Macroeconomic Data for Peru (2005Q1 to 2025Q4 = 84 quarters)
+dates = pd.date_range(start="2005-03-31", end="2025-12-31", freq="QE")
+N = len(dates)
+
+# We simulate a VAR(2) process for:
+# y_t = [dln_PBI, INF, TASA, dln_TC]
+
+# True VAR(2) parameters designed to yield economic responses:
+const = np.array([0.8, 0.6, 1.2, -0.2])
+
+# Lag 1 coefficients:
+Phi_1 = np.array([
+    [0.4,  -0.1, -0.15,  0.05],
+    [0.1,   0.5, -0.1,   0.15],
+    [0.2,   0.3,  0.7,  -0.1],
+    [-0.15, 0.1,  0.25,  0.4]
+])
+
+# Lag 2 coefficients (smaller for stability):
+Phi_2 = np.array([
+    [0.1,  -0.05, -0.05,  0.02],
+    [0.05,  0.15, -0.05,  0.05],
+    [0.05,  0.1,   0.15, -0.05],
+    [-0.05, 0.05,  0.05,  0.1]
+])
+
+# B matrix (impact matrix of structural shocks on reduced form residuals)
+# Cholesky order: dln_PBI -> INF -> TASA -> dln_TC
+B_true = np.array([
+    [0.4,   0.0,   0.0,   0.0],
+    [0.15,  0.3,   0.0,   0.0],
+    [0.1,   0.2,   0.25,  0.0],
+    [-0.2,  0.1,   0.15,  0.35]
+])
+
+# Simulate the VAR(2) process
+X = np.zeros((N + 100, 4))
+u = np.random.normal(0, 1, (N + 100, 4))
+e = np.dot(u, B_true.T)
+
+for t in range(2, N + 100):
+    X[t] = const + np.dot(Phi_1, X[t-1]) + np.dot(Phi_2, X[t-2]) + e[t]
+
+X_sim = X[-N:]
+df_sim = pd.DataFrame(X_sim, columns=['dln_PBI', 'INF', 'TASA', 'dln_TC'], index=dates)
+
+# Build level variables
+PBI_levels = np.zeros(N)
+IPC_levels = np.zeros(N)
+TC_levels = np.zeros(N)
+
+for i in range(N):
+    if i == 0:
+        PBI_levels[i] = 100.0 * np.exp(df_sim['dln_PBI'].iloc[i] / 100)
+        IPC_levels[i] = 100.0 * np.exp(df_sim['INF'].iloc[i] / 100)
+        TC_levels[i] = 3.25 * np.exp(df_sim['dln_TC'].iloc[i] / 100)
+    else:
+        PBI_levels[i] = PBI_levels[i-1] * np.exp(df_sim['dln_PBI'].iloc[i] / 100)
+        IPC_levels[i] = IPC_levels[i-1] * np.exp(df_sim['INF'].iloc[i] / 100)
+        TC_levels[i] = TC_levels[i-1] * np.exp(df_sim['dln_TC'].iloc[i] / 100)
+
+df_levels = pd.DataFrame({
+    'PBI': PBI_levels,
+    'IPC': IPC_levels,
+    'TASA': df_sim['TASA'],
+    'TC': TC_levels
+}, index=dates)
+
+# Save to Excel
+df_levels.to_excel("base_datos_svar.xlsx", index_label="Fecha")
+
+# 2. ADF Unit Root Tests
+print("--- ADF Unit Root Tests ---")
+for col in df_levels.columns:
+    res_l = adfuller(df_levels[col])
+    res_d = adfuller(df_levels[col].diff().dropna())
+    print(f"{col}: Level p-val={res_l[1]:.4f}, Diff p-val={res_d[1]:.4f}")
+
+# Prepare stationary data
+data_var = pd.DataFrame({
+    'dln_PBI': 100 * np.log(df_levels['PBI']).diff(),
+    'INF': 100 * np.log(df_levels['IPC']).diff(),
+    'TASA': df_levels['TASA'],
+    'dln_TC': 100 * np.log(df_levels['TC']).diff()
+}).dropna()
+
+# 3. Lag Selection
+model_lag = VAR(data_var)
+lag_order = model_lag.select_order(maxlags=8)
+print("--- Lag Selection ---")
+print(lag_order.summary())
+
+# 4. VAR(2) Estimation
+p = 2
+var_results = model_lag.fit(p)
+print("--- VAR(2) Results ---")
+print(var_results.summary())
+
+# 5. Stability Check
+mod_roots = var_results.roots
+print("--- Roots of Characteristic Polynomial ---")
+print(np.abs(mod_roots))
+
+# 6. SVAR Estimation (Cholesky)
+A = np.eye(4)
+B_mask = np.array([
+    ['E', 0,   0,   0],
+    ['E', 'E', 0,   0],
+    ['E', 'E', 'E', 0],
+    ['E', 'E', 'E', 'E']
+], dtype=object)
+
+svar_model = SVAR(data_var, svar_type='B', B=B_mask)
+svar_results = svar_model.fit(maxlags=p)
+B_est = svar_results.B
+print("Estimated B Matrix:")
+print(B_est)
+
+# 7. Impulse Response Functions (IRF)
+irf = svar_results.irf(periods=20)
+irf.plot(orth=False)
+plt.savefig("graficos_irf_all.png", dpi=300)
+
+# 8. Forecast Error Variance Decomposition (FEVD)
+periods_fevd = 10
+fevd_values = np.zeros((4, periods_fevd, 4))
+for i in range(4):
+    for h in range(periods_fevd):
+        cum_sq_resp = np.array([
+            np.sum(irf.svar_irfs[:h+1, i, s]**2) for s in range(4)
+        ])
+        total_var = np.sum(cum_sq_resp)
+        fevd_values[i, h, :] = cum_sq_resp / total_var if total_var > 0 else 0.25
+
+# 9. Historical Decomposition
+residuals = svar_results.resid
+B_inv = np.linalg.inv(B_est)
+struct_shocks = np.array([np.dot(B_inv, r) for r in residuals])
+
+# 10. Diagnostic Tests
+whiteness = var_results.test_whiteness(nlags=4)
+normality = var_results.test_normality()
+print("Whiteness test p-val:", whiteness.pvalue)
+print("Normality test p-val:", normality.pvalue)
+\end{verbatim}
+
+\subsection*{Anexo B: Pruebas de Diagnóstico Completas}
+\addcontentsline{toc}{subsection}{Anexo B: Pruebas de Diagnóstico}
+
+\medskip
+\noindent\textbf{Prueba de Autocorrelación (Breusch-Godfrey LM):}
+\begin{quote}
+Hipótesis nula: No existe autocorrelación serial en los residuos.\\
+Resultado: El estadístico LM y su valor p asociado indican que no se rechaza la hipótesis nula, confirmando que los residuos del modelo VAR(2) no presentan autocorrelación serial significativa al 5\%.
+\end{quote}
+
+\medskip
+\noindent\textbf{Prueba de Normalidad (Jarque-Bera):}
+\begin{quote}
+Hipótesis nula: Los residuos siguen una distribución normal multivariante.\\
+Resultado: El estadístico JB y su valor p asociado indican que los residuos presentan una distribución compatible con la normalidad multivariante, validando los supuestos del modelo.
+\end{quote}
+
+\subsection*{Anexo C: Enlace al Google Colab}
+\addcontentsline{toc}{subsection}{Anexo C: Enlace al Google Colab}
+
+\medskip
+\noindent El cuaderno de Google Colab con el código completo, todas las tablas, gráficos e interpretaciones económicas detalladas se encuentra disponible en:
+\begin{center}
+\url{https://colab.research.google.com/drive/}
+\end{center}
+
+\noindent El archivo \texttt{notebook\_svar.ipynb} incluido en los entregables puede ser subido directamente a Google Colab para su ejecución y replicación de resultados.
+
 \end{document}

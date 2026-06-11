@@ -1,0 +1,6 @@
+Portmanteau-test for residual autocorrelation. H_0: residual autocorrelation up to lag 4 is zero. Conclusion: reject H_0 at 5% significance level.
+========================================
+Test statistic Critical value p-value df
+----------------------------------------
+         49.66          46.19   0.024 32
+----------------------------------------

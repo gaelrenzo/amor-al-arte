@@ -1,0 +1,10 @@
+Pruebas de Diagnóstico del Modelo VAR(2):
+1. Prueba de Autocorrelación Residual (Portmanteau / Whiteness test, nlags=4):
+   - Estadístico: 49.6588
+   - p-valor: 0.0240
+   - Conclusión: Se rechaza la hipótesis nula de no autocorrelación.
+
+2. Prueba de Normalidad de Residuos (Jarque-Bera):
+   - Estadístico: 6.5246
+   - p-valor: 0.5887
+   - Conclusión: Los residuos siguen una distribución normal a un nivel de significancia del 5%.

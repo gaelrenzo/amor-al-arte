@@ -1,0 +1,12 @@
+SVAR Estimation Results
+========================
+SVAR Type: B (A is restricted to Identity Matrix)
+
+Estimated B Matrix (Impact of Structural Shocks on Reduced-Form Residuals):
+[[ 0.3953,  0.    ,  0.    ,  0.    ],
+ [ 0.0948,  0.2891,  0.    ,  0.    ],
+ [ 0.0192,  0.2229,  0.2643,  0.    ],
+ [-0.1906,  0.1105,  0.2152,  0.3323]]
+
+Standard Errors of B:
+Not available

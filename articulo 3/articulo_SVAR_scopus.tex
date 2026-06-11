@@ -476,8 +476,67 @@ Root & Real & Imaginary & Modulus & Stable \\
 \section{Python Code for Google Colab}
 \label{app:E}
 
-This appendix contains the complete Python code for the SVAR estimation. The code can be executed in Google Colab.
+This appendix contains the complete Python code for the SVAR estimation. The code can be executed in Google Colab. Due to space constraints, the full source code is provided in the accompanying file \texttt{codigo\_SVAR.py} and the Jupyter notebook \texttt{codigo\_SVAR.ipynb}. Below is the main structure of the code implemented in the empirical analysis.
 
-\lstinputlisting[language=Python, caption=Complete SVAR estimation code, label=code:svar]{codigo_SVAR.py}
+\begin{lstlisting}[language=Python, caption=Main SVAR estimation routine, label=code:svar]
+# 1. LIBRARIES
+import pandas as pd, numpy as np, matplotlib.pyplot as plt
+from statsmodels.tsa.stattools import adfuller, kpss
+from statsmodels.tsa.api import VAR
+import warnings; warnings.filterwarnings("ignore")
+
+# 2. DATA LOADING
+df = pd.read_excel('base_datos_sintetica.xlsx',
+                   sheet_name='Datos Originales', index_col=0)
+df.index = pd.to_datetime(df.index)
+
+# 3. STATIONARITY TESTS
+def adf_test(series):
+    result = adfuller(series.dropna(), autolag="AIC")
+    return {'stat': result[0], 'pvalue': result[1]}
+
+for col in df.columns:
+    res = adf_test(df[col])
+    print(f'{col}: ADF={res["stat"]:.4f}, p={res["pvalue"]:.4f}')
+
+# 4. DIFFERENCING AND LAG SELECTION
+df_diff = df.diff().dropna()
+model_var = VAR(df_diff)
+criterios = model_var.select_order(maxlags=12)
+p_opt = criterios.aic
+print(f"Optimal lag (AIC): VAR({p_opt})")
+
+# 5. VAR ESTIMATION
+var_model = model_var.fit(p_opt)
+print(var_model.summary())
+
+# 6. STABILITY CHECK
+roots = var_model.roots
+stable = all(abs(r) < 1 for r in roots)
+print(f"Model stable: {stable}")
+
+# 7. SVAR IDENTIFICATION (CHOLESKY)
+sigma_u = var_model.sigma_u
+chol = np.linalg.cholesky(sigma_u)
+print("Contemporaneous impact matrix:")
+print(pd.DataFrame(chol, index=df.columns, columns=df.columns).round(4))
+
+# 8. IMPULSE-RESPONSE FUNCTIONS
+periods = 24
+irf = var_model.irf(periods)
+irf.plot()
+plt.show()
+
+# 9. FORECAST ERROR VARIANCE DECOMPOSITION
+fevd = var_model.fevd(periods)
+for j, var in enumerate(df_diff.columns):
+    print(f"FEVD for {var}:")
+    for t in [1, 4, 8, 12, 24]:
+        vals = [fevd.decomp[t, j, i]*100
+                for i in range(len(df_diff.columns))]
+        print(f"  t={t}: {vals}")
+\end{lstlisting}
+
+\noindent The complete code with all outputs, diagnostic tests, and interpretations is available in the accompanying files \texttt{codigo\_SVAR.py} and \texttt{codigo\_SVAR.ipynb}.
 
 \end{document}
